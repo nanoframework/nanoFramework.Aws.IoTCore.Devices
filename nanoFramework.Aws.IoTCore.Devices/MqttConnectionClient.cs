@@ -16,9 +16,9 @@ namespace nanoFramework.Aws.IoTCore.Devices
 {
     /// <summary>
     /// AWS IoT Core MQTT Connection Client for .NET nanoFramework
-    /// <seealso cref="https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/IotData/Generated/_netstandard/AmazonIotDataClient.cs"/>
-    /// <seealso cref="https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/src"/>
-    /// <seealso cref="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html"/>
+    /// <cref="https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/IotData/Generated/_netstandard/AmazonIotDataClient.cs"/>
+    /// <cref="https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/src"/>
+    /// <cref="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html"/>
     /// </summary>
     public class MqttConnectionClient : IDisposable
     {
@@ -26,13 +26,17 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// The QoS Level
         /// </summary>
         /// <remarks>
-        /// AWS Only supports levels:
-        /// - AtMostOnce (0)
-        /// - AtLeastOnce (1)
+        /// AWS IoT Core only supports levels 0, and 1.
         /// </remarks>
         public enum QoSLevel
         {
+        /// <summary>
+        /// At Most Once (0)
+        /// </summary>
             AtMostOnce = MqttQoSLevel.AtMostOnce,
+        /// <summary>
+        /// At Least Once (1)
+        /// </summary>
             AtLeastOnce = MqttQoSLevel.AtLeastOnce
 
         }
