@@ -20,7 +20,6 @@ namespace nanoFramework.Aws.IoTCore.Devices
     /// <seealso cref="https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/IotData/Generated/_netstandard/AmazonIotDataClient.cs"/>
     /// <seealso cref="https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/src"/>
     /// <seealso cref="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html"/>
-
     public class MqttConnectionClient : IDisposable
     {
         /// <summary>
