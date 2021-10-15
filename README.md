@@ -1,2 +1,2 @@
 # nanoFramework.Aws.IoTCore.Devices
-AWS IoT Core Devices library
+AWS IoT Core Devices library Preview
