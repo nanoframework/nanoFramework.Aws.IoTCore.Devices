@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.0-preview.12](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/tree/v1.0.0-preview.12) (2021-10-15)
+
+[Full Changelog](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/compare/v1.0.0-preview.10...v1.0.0-preview.12)
+
 ## [v1.0.0-preview.10](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/tree/v1.0.0-preview.10) (2021-10-15)
 
 [Full Changelog](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/compare/v1.0.0-preview.8...v1.0.0-preview.10)
