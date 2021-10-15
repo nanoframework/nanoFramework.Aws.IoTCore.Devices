@@ -11,7 +11,7 @@ namespace nanoFramework.Aws.IoTCore.Devices.Devices.Client
         /// <summary>
         /// Creates a new WebSocket Connection Client
         /// </summary>
-        WebsocketConnectionClient()
+        public WebsocketConnectionClient()
         {
             //TODO: implement!
             throw new NotImplementedException();

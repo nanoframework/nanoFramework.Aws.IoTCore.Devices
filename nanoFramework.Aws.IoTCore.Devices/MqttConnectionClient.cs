@@ -16,10 +16,11 @@ namespace nanoFramework.Aws.IoTCore.Devices
 {
     /// <summary>
     /// AWS IoT Core MQTT Connection Client for .NET nanoFramework
-    /// <cref="https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/IotData/Generated/_netstandard/AmazonIotDataClient.cs"/>
-    /// <cref="https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/src"/>
-    /// <cref="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html"/>
     /// </summary>
+    /// <seealso cref="https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/IotData/Generated/_netstandard/AmazonIotDataClient.cs"/>
+    /// <seealso cref="https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/src"/>
+    /// <seealso cref="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html"/>
+
     public class MqttConnectionClient : IDisposable
     {
         /// <summary>
@@ -48,7 +49,6 @@ namespace nanoFramework.Aws.IoTCore.Devices
 
         private M2Mqtt.MqttClient _mqttc;
         private readonly ConnectorState _mqttBrokerStatus = new ConnectorState();
-        private readonly ArrayList _methodCallback = new ArrayList();
         private readonly ArrayList _waitForConfirmation = new ArrayList();
         private readonly object _lock = new object();
         private Timer _timerTokenRenew;
