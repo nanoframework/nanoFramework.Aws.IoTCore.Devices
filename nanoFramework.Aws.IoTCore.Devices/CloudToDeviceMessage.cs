@@ -21,6 +21,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// Constructor for device message event arguments.
         /// </summary>
         /// <param name="message">The string message.</param>
+        /// <param name="topic">The topic that the message was received.</param>
         public CloudToDeviceMessageEventArgs(string message, string topic)
         {
             Message = message;

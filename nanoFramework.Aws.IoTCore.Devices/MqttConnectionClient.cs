@@ -16,12 +16,10 @@ namespace nanoFramework.Aws.IoTCore.Devices
 {
     /// <summary>
     /// AWS IoT Core MQTT Connection Client for .NET nanoFramework
-    /// </summary>
-    /// <remarks>
     /// <seealso cref="https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/IotData/Generated/_netstandard/AmazonIotDataClient.cs"/>
     /// <seealso cref="https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/src"/>
     /// <seealso cref="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html"/>
-    /// </remarks>
+    /// </summary>
     public class MqttConnectionClient : IDisposable
     {
         /// <summary>
@@ -86,7 +84,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// <summary>
         /// Creates an <see cref="MqttConnectionClient"/> class.
         /// </summary>
-        /// <param name="iotCoreUri">The AWS IoT Core fully quilified domain name (example: <instance>.<region>.amazonaws.com)</param>
+        /// <param name="iotCoreUri">The AWS IoT Core fully quilified domain name (example: 'instance'.'region'.amazonaws.com)</param>
         /// <param name="uniqueId">A unique identity for your device (Device ID / Thing Name).</param>
         /// <param name="clientCert">The certificate used to connect the device to the MQTT broker (containing both the private certificate and private key).</param>
         /// <param name="qosLevel">The default quality of service level for the delivery of MQTT messages, (defaults to the lowest quality)</param>
