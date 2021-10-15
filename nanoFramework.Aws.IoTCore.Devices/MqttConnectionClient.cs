@@ -19,10 +19,10 @@ namespace nanoFramework.Aws.IoTCore.Devices
     /// </summary>
     /// <remarks>
     /// Further documentation:
-    /// <a href="https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/IotData/Generated/_netstandard/AmazonIotDataClient.cs"/>
-    /// <a href="https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/src"/>
-    /// <a href="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html"/>
-    /// <remarks>
+    /// <see href="https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Services/IotData/Generated/_netstandard/AmazonIotDataClient.cs"/>
+    /// <see href="https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/src"/>
+    /// <see href="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html"/>
+    /// </remarks>
     public class MqttConnectionClient : IDisposable
     {
         /// <summary>
@@ -85,6 +85,8 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// Cloud to device message received event.
         /// </summary>
         public event CloudToDeviceMessage CloudToDeviceMessage;
+
+        internal MqttConnectionClient() { } //Required by IDisposable.
 
 
         /// <summary>
