@@ -86,7 +86,7 @@ namespace nanoFramework.Aws.IoTCore.Devices.Shadows
         /// <summary>
         /// Gets the Shadow as a JSON string.
         /// </summary>
-        /// <param name="fullJsonString"> Optional: Only returns a partial json string for use with updates. unless specified.</param>
+        /// <param name="updateShadow"> Optional: Only returns a partial json string for use with updates. unless specified.</param>
         /// <returns>JSON string</returns>
         public string ToJson(bool updateShadow = true)
         {

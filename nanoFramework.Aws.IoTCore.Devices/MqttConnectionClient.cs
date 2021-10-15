@@ -255,8 +255,10 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// <param name="cancellationToken">A cancellation token</param>
         /// <param name="namedShadow">A named shadow</param>
         /// <returns>The shadow.</returns>
-        /// <remarks>It is strongly recommended to use a cancellation token that can be canceled and manage this on the 
-        /// caller code level. A reasonable time of few seconds is recommended with a retry mechanism.</remarks>
+        /// <remarks>
+        /// It is strongly recommended to use a cancellation token that can be canceled and manage this on the 
+        /// caller code level. A reasonable time of few seconds is recommended with a retry mechanism.
+        /// </remarks>
         public Shadow GetShadow(CancellationToken cancellationToken = default, string namedShadow = "")
         {
             _shadowReceived = false;
@@ -280,8 +282,9 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// <summary>
         /// Update the device shadow reported state.
         /// </summary>
-        /// <param name="reported">The reported properties.</param>
+        /// <param name="shadowToSend">The Shadow to send.</param>
         /// <param name="cancellationToken">A cancellation token. If you use the default one, the confirmation of delivery will not be awaited.</param>
+        /// <param name="namedShadow">The suplementry Shadow name.</param>
         /// <returns>True for successful message delivery.</returns>
         public bool UpdateReportedState(Shadow shadowToSend, CancellationToken cancellationToken = default, string namedShadow = "") //was ShadowCollection
         {
