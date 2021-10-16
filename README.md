@@ -8,9 +8,13 @@ Some notes to improve lib:
 * fleet provisioning support?!
 
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=nanoframework_Aws_IoTCore_Devices&metric=alert_status)](https://sonarcloud.io/dashboard?id=nanoframework_Aws_IoTCore_Devices)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=nanoframework_Aws_IoTCore_Devices&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=nanoframework_Aws_IoTCore_Devices)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![NuGet](https://img.shields.io/nuget/dt/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
+[![#yourfirstpr](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://github.com/nanoframework/Home/blob/main/CONTRIBUTING.md)
+[![Discord](https://img.shields.io/discord/478725473862549535.svg?logo=discord&logoColor=white&label=Discord&color=7289DA)](https://discord.gg/gCyBu8T)
 
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=nanoframework_Aws_IoTCore_Devices&metric=alert_status)](https://sonarcloud.io/dashboard?id=nanoframework_Aws_IoTCore_Devices) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=nanoframework_Aws_IoTCore_Devices&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=nanoframework_Aws_IoTCore_Devices) [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![NuGet](https://img.shields.io/nuget/dt/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/) [![#yourfirstpr](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://github.com/nanoframework/Home/blob/main/CONTRIBUTING.md) [![Discord](https://img.shields.io/discord/478725473862549535.svg?logo=discord&logoColor=white&label=Discord&color=7289DA)](https://discord.gg/gCyBu8T)
 
 ![nanoFramework logo](https://github.com/nanoframework/Home/blob/main/resources/logo/nanoFramework-repo-logo.png)
 
@@ -22,8 +26,21 @@ Some notes to improve lib:
 
 | Component | Build Status | NuGet Package |
 |:-|---|---|
-| nanoFramework.Aws.IoTCore.Devices | [![Build Status](https://dev.azure.com/nanoframework/Aws/IoTCore/Devices/_apis/build/status/nanoFramework.Aws.IoTCore.Devices?branchName=main)](https://dev.azure.com/nanoframework.Aws.IoTCore.Devices/_build/latest?definitionId=81&branchName=main) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/) |
-| nanoFramework.Aws.IoTCore.Devices (preview) | [![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_apis/build/status/nanoframework.nanoFramework.Aws.IoTCore.Devices?branchName=develop)](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_build/latest?definitionId=81&branchName=develop) | [![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/) |
+
+| nanoFramework.Aws.IoTCore.Devices
+| 
+[![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_apis/build/status/nanoframework.nanoFramework.Aws.IoTCore.Devices?branchName=main)](https://dev.azure.com/nanoframework/nanoframework.Aws.IoTCore.Devices/_build/latest?definitionId=81&branchName=main)
+| 
+[![NuGet](https://img.shields.io/nuget/v/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
+|
+
+|
+nanoFramework.Aws.IoTCore.Devices (preview)
+|
+[![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_apis/build/status/nanoframework.nanoFramework.Aws.IoTCore.Devices?branchName=develop)](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_build/latest?definitionId=81&branchName=develop)
+|
+[![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
+|
 
 ## See it in action
 
