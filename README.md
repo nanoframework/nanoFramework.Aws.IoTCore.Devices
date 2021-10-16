@@ -119,7 +119,7 @@ Note: please see the previous section to understand how to better pass the certi
 
 ### Getting and updating Device Shadow
 
-You can request your Azure IoT Twin simply by calling the `GetTwin` function.
+You can request your Shadow simply by calling the `GetShadow` function.
 
 ```csharp
 var shadow = awsIoT.GetShadow(new CancellationTokenSource(20000).Token);
