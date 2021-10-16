@@ -20,7 +20,7 @@ Some notes to improve lib:
 
 -----
 
-# Welcome to the **nanoFramework** Aws.IoTCore.Devices Library repository!
+# Welcome to the **nanoFramework** Aws.IoTCore.Devices repository!
 
 ## Build status
 
@@ -31,17 +31,17 @@ Some notes to improve lib:
 
 ## See it in action
 
-TODO!
+TODO! Please help us to add some samples!
 
 ## Usage
 
-**Important**: You **must** be connected to a network with a valid IP address **and** a valid date. Please check the examples with the Network Helpers on how to help you making sure you have both.
+**Important**: Due to TLS, You **must** be connected to the internet (which means already having an IP address from your router) **and** a valid (minimum of today) date and time. Please check the examples that use networking (especially those that include TLS/NTP) to help you ensure it will work.
 
-This AWS IoT SDK is using MQTT. So you need to ensure you can connect to port 8883 using TLS protocol. If you are in an enterprise network, this may be blocked. In most cases, this is not an issue.
+This AWS IoT SDK is using MQTT. So you need to ensure you have an outbound firewall port open to the TCP port 8883. If you are in an enterprise network, this may be blocked.
 
 If it is, in future, we plan to add WebSocket support.
 
-The the name of the classes and the methods try to get close to the .NET C# Azure IoT SDK. This should allow an easier portability of the code between both cloud provider environments.
+The the name of the classes and the methods try to get close to the [.NET nanoFramework C# Azure IoT SDK](https://github.com/nanoFramework/nanoFramework.Azure.Devices). This should allow an easier portability of the code between both cloud provider environments.
 
 ### Certificate
 
