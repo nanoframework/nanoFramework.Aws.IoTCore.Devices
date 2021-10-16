@@ -88,7 +88,7 @@ X509Certificate awsRootCACert = new X509Certificate(Resources.GetBytes(Resources
 MqttConnectionClient awsIoT = new MqttConnectionClient(IotBrokerAddress, ThingId, clientCert, MqttConnectionClient.QoSLevel.AtLeastOnce, awsRootCACert);
 ```
 
-Note: when the certificate expires, you will have to reflash fully the device with the new certificate, or build a mechinisum into your code to include a primary and secondary certificate.
+Note: when the certificate expires, you will have to fully reflash the device with the new certificates and keys, or build a mechanism into your code to include primary and secondary versions of them.
 
 #### Storing the certificate into the device
 
