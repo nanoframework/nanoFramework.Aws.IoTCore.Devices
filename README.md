@@ -28,18 +28,13 @@ Some notes to improve lib:
 |:-|---|---|
 
 | nanoFramework.Aws.IoTCore.Devices
-| 
-[![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_apis/build/status/nanoframework.nanoFramework.Aws.IoTCore.Devices?branchName=main)](https://dev.azure.com/nanoframework/nanoframework.Aws.IoTCore.Devices/_build/latest?definitionId=81&branchName=main)
-| 
-[![NuGet](https://img.shields.io/nuget/v/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
+| [![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_apis/build/status/nanoframework.nanoFramework.Aws.IoTCore.Devices?branchName=main)](https://dev.azure.com/nanoframework/nanoframework.Aws.IoTCore.Devices/_build/latest?definitionId=81&branchName=main)
+| [![NuGet](https://img.shields.io/nuget/v/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
 |
 
-|
-nanoFramework.Aws.IoTCore.Devices (preview)
-|
-[![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_apis/build/status/nanoframework.nanoFramework.Aws.IoTCore.Devices?branchName=develop)](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_build/latest?definitionId=81&branchName=develop)
-|
-[![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
+| nanoFramework.Aws.IoTCore.Devices (preview)
+| [![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_apis/build/status/nanoframework.nanoFramework.Aws.IoTCore.Devices?branchName=develop)](https://dev.azure.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/_build/latest?definitionId=81&branchName=develop)
+| [![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
 |
 
 ## See it in action
