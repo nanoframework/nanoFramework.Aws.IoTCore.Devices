@@ -1,6 +1,6 @@
 ﻿
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=nanoframework.Aws.IoTCore.Devices&metric=alert_status)](https://sonarcloud.io/dashboard?id=nanoframework.Aws.IoTCore.Devices)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=nanoframework.Aws.IoTCore.Devices&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=nanoframework.Aws.IoTCore.Devices)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=nanoFramework.Aws.IoTCore.Devices&metric=alert_status)](https://sonarcloud.io/dashboard?id=nanoFramework.Aws.IoTCore.Devices)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=nanoFramework.Aws.IoTCore.Devices&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=nanoframework.Aws.IoTCore.Devices)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![NuGet](https://img.shields.io/nuget/dt/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
 [![#yourfirstpr](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://github.com/nanoframework/Home/blob/main/CONTRIBUTING.md)
