@@ -487,6 +487,17 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// <inheritdoc/>
         public void Dispose()
         {
+            // Cleanup
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
             if (_mqttc != null)
             {
                 // Making sure we unregister to events
@@ -505,6 +516,14 @@ namespace nanoFramework.Aws.IoTCore.Devices
                 GC.SuppressFinalize(_mqttc);
                 _mqttc = null;
             }
+        }
+
+        /// <summary>
+        /// Deconstructor
+        /// </summary>
+        ~MqttConnectionClient()
+        {
+            Dispose(false);
         }
     }
 }
