@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "nanoFramework.Aws.IoTCore.Devices", "nanoFramework.Aws.IoTCore.Devices\nanoFramework.Aws.IoTCore.Devices.nfproj", "{3473C1B1-23F4-4EE3-8709-2D35D01220A6}"
 EndProject
-Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "nanoFramework.Aws.IoTCore.Devices.Tests", "Tests\Aws.IoTCore.Devices.UnitTests.nfproj", "{99186E17-5D65-4218-9707-97D12A0C8605}"
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "Aws.IoTCore.Devices.UnitTests", "Tests\Aws.IoTCore.Devices.UnitTests.nfproj", "{99186E17-5D65-4218-9707-97D12A0C8605}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{97905949-225F-47F4-AD99-42D42E90406D}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.Config = NuGet.Config
+		version.json = version.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,12 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{67298667-62F5-4C72-A2CC-22031D6B0D61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67298667-62F5-4C72-A2CC-22031D6B0D61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67298667-62F5-4C72-A2CC-22031D6B0D61}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{67298667-62F5-4C72-A2CC-22031D6B0D61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67298667-62F5-4C72-A2CC-22031D6B0D61}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67298667-62F5-4C72-A2CC-22031D6B0D61}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{3473C1B1-23F4-4EE3-8709-2D35D01220A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3473C1B1-23F4-4EE3-8709-2D35D01220A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3473C1B1-23F4-4EE3-8709-2D35D01220A6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
