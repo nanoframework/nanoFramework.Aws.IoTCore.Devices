@@ -15,7 +15,7 @@ namespace nanoFramework.Aws.IoTCore.Devices.Tests
         [TestMethod]
         public void get_shadow_class_to_json()
         {
-            //technicallly un-necessary, but a good check!
+            //technically un-necessary, but a good check!
             // need to make sure the above method passes before attempting this!
         }
 
@@ -28,8 +28,8 @@ namespace nanoFramework.Aws.IoTCore.Devices.Tests
         [TestMethod]
         public void create_update_shadow_to_send_class()
         {
-            //technicallly un-necessary, but a good check!
-            //in the realworld, this would be a different class.
+            //technically un-necessary, but a good check!
+            //in the real world, this would be a different class.
             // need to make sure the above method passes before attempting this!
         }
 
