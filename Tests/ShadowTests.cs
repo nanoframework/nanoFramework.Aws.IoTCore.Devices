@@ -1,7 +1,7 @@
 using nanoFramework.TestFramework;
 using System;
 
-namespace nanoFramwwork.Aws.IoTCore.Devices.Tests
+namespace nanoFramework.Aws.IoTCore.Devices.Tests
 {
     [TestClass]
     public class ShadowTests

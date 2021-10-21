@@ -1,7 +1,7 @@
 ﻿// Copyright (c) .Net Foundation. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace nanoFramwwork.Aws.IoTCore.Devices.Tests
+namespace nanoFramework.Aws.IoTCore.Devices.Tests
 {
     /// <summary>
     /// Connection status.
