@@ -11,7 +11,7 @@
 
 -----
 
-# Welcome to the **nanoFramework** Aws.IoTCore.Devices repository!
+# Welcome to the .NET **nanoFramework** AWS IoT Core SDK repository!
 
 ## Build status
 
@@ -156,7 +156,7 @@ void ShadowUpdatedEvent(object sender, ShadowUpdateEventArgs e)
 
 ### Sending message
 
-You have to use the `SendMessage` function to send any kind of message or telemetry to Aws IoT. As with the other function, you have the possibility to ensure delivery using a `CancellationToken` than can be cancelled. If one that can't be cancelled is used, the delivery insurance will be ignored and the function will return false.
+You have to use the `SendMessage` function to send any kind of message or telemetry to AWS IoT. As with the other function, you have the possibility to ensure delivery using a `CancellationToken` than can be cancelled. If one that can't be cancelled is used, the delivery insurance will be ignored and the function will return false.
 
 ```csharp
 var isReceived = awsIoT.SendMessage($"{{\"Temperature\":42,\"Pressure\":1024}}", new CancellationTokenSource(5000).Token);
@@ -249,14 +249,13 @@ The list of contributors to this project can be found at [CONTRIBUTORS](https://
 
 ## License
 
-The **nanoFramework** Class Libraries are licensed under the [MIT license](LICENSE.md).
+The .NET **nanoFramework** Class Libraries are licensed under the [MIT license](LICENSE.md).
 
 ## Code of Conduct
 
-This project has adopted the code of conduct defined by the Contributor Covenant to clarify expected behavior in our community.
+This project has adopted the code of conduct defined by the Contributor Covenant to clarify expected behaviour in our community.
 For more information see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
 
 ### .NET Foundation
 
 This project is supported by the [.NET Foundation](https://dotnetfoundation.org).
-

@@ -1,5 +1,7 @@
-﻿// Copyright (c) .Net Foundation. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+﻿//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
 
 using nanoFramework.Aws.IoTCore.Devices.Shadows;
 using nanoFramework.Json;
@@ -92,7 +94,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// <summary>
         /// Creates an <see cref="MqttConnectionClient"/> class.
         /// </summary>
-        /// <param name="iotCoreUri">The AWS IoT Core fully quilified domain name (example: 'instance'.'region'.amazonaws.com)</param>
+        /// <param name="iotCoreUri">The AWS IoT Core fully qualified domain name (example: 'instance'.'region'.amazonaws.com)</param>
         /// <param name="uniqueId">A unique identity for your device (Device ID / Thing Name).</param>
         /// <param name="clientCert">The certificate used to connect the device to the MQTT broker (containing both the private certificate and private key).</param>
         /// <param name="qosLevel">The default quality of service level for the delivery of MQTT messages, (defaults to the lowest quality)</param>
@@ -128,7 +130,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
         public MqttQoSLevel QosLevel { get; set; }
 
         /// <summary>
-        /// True if the device connected sucessfully.
+        /// True if the device connected successfully.
         /// </summary>
         public bool IsConnected => (_mqttc != null) && _mqttc.IsConnected;
 
@@ -152,7 +154,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// </summary>
         /// <param name="telemetryTopic">The telemetry topic</param>
         /// <param name="deviceMessageTopic">The device message topic</param>
-        /// <param name="lwtTopic">The last will and testiment topic</param>
+        /// <param name="lwtTopic">The last will and testament topic</param>
         /// <returns>True for a successful connection</returns>
         public bool Open(string telemetryTopic, string deviceMessageTopic, string lwtTopic)
         {
@@ -194,7 +196,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
                 false, //TODO: but if "willretain" is that... what is "willflag" doing?
                 _lwtTopic,
                 "MQTT connection was unexpectedly disconnected!",
-                true, //TODO: this "should" handle persistant connections, and should be configurable?!
+                true, //TODO: this "should" handle persistent connections, and should be configurable?!
                 60
                 );
 
@@ -248,7 +250,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
                     $"{ _shadowTopic }/#",
                     });
                 _mqttc.Disconnect();
-                // Make sure all get disconnected, cleared (TODO: 1 second arbitary value specified)
+                // Make sure all get disconnected, cleared (TODO: 1 second arbitrary value specified)
                 Thread.Sleep(1000);
             }
 
@@ -290,7 +292,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// </summary>
         /// <param name="shadowToSend">The Shadow to send.</param>
         /// <param name="cancellationToken">A cancellation token. If you use the default one, the confirmation of delivery will not be awaited.</param>
-        /// <param name="namedShadow">The suplementry Shadow name.</param>
+        /// <param name="namedShadow">The supplementary Shadow name.</param>
         /// <returns>True for successful message delivery.</returns>
         public bool UpdateReportedState(Shadow shadowToSend, CancellationToken cancellationToken = default, string namedShadow = "") //was ShadowCollection
         {
@@ -350,7 +352,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
             return false;
         }
 
-        private void ClientMqttMsgReceived(object sender, MqttMsgPublishEventArgs e) //TODO: can we also add subscriptions publiclly?!! 
+        private void ClientMqttMsgReceived(object sender, MqttMsgPublishEventArgs e) //TODO: can we also add subscriptions publicly?!! 
         {
             //TODO: we might need to be more specific with topics to ensure reduced costs!
             Debug.WriteLine($"MsgReceivedHandler: received message on a subscribed topic: {e.Topic}");
@@ -364,7 +366,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
 
                     if (e.Topic.StartsWith($"{_shadowTopic}/update") || (e.Topic.StartsWith($"{_shadowTopic}/name") && e.Topic.Contains("/update"))) //TODO: check correctness!
                     {
-                        //TODO: we might have to be more specific with subscribed topics here... I think receiving some of these could cost money, even if they are irrelevent!
+                        //TODO: we might have to be more specific with subscribed topics here... I think receiving some of these could cost money, even if they are irrelevant!
                         Debug.WriteLine($"ReceivedHandler Reached (update): {e.Topic}");
                         if (e.Topic.Contains("/rejected"))
                         {
@@ -381,7 +383,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
                             _mqttBrokerStatus.Message = jsonMessageBody;
                             StatusUpdated?.Invoke(this, new StatusUpdatedEventArgs(_mqttBrokerStatus));
                         }
-                        else if (e.Topic.Contains("/accepted")) //TODO: this should not be required, since a delta should take precidence (but what if there is no delta?!)...
+                        else if (e.Topic.Contains("/accepted")) //TODO: this should not be required, since a delta should take precedence (but what if there is no delta?!)...
                         {
                             Debug.WriteLine($"ReceivedHandler Reached (update-accepted): {e.Topic}");
                             _mqttBrokerStatus.State = ConnectorStateMessage.ShadowUpdated;
@@ -497,7 +499,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
                 Close();
                 while (_mqttc.IsConnected)
                 {
-                    Thread.Sleep(100); //TODO: arbitry value, explain why.
+                    Thread.Sleep(100); //TODO: arbitrary value, explain why.
 
                 }
 

@@ -1,5 +1,7 @@
-﻿// Copyright (c) .Net Foundation. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+﻿//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
 
 namespace nanoFramework.Aws.IoTCore.Devices
 {
