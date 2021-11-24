@@ -5,19 +5,19 @@
     <version>$version$</version>
     <title>nanoFramework.Aws.IoTCore.Devices</title>
     <authors>nanoFramework project contributors</authors>
-    <owners>nanoFramework project contributors,dotnetfoundation</owners>
+    <owners>nanoFramework,dotnetfoundation</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="file">LICENSE.md</license>
     <releaseNotes>
     </releaseNotes>
+    <readme>docs\README.md</readme>
     <developmentDependency>false</developmentDependency>
     <projectUrl>https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices</projectUrl>
     <icon>images\nf-logo.png</icon>
     <repository type="git" url="https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices" commit="$commit$" />
     <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
-    <description>This package includes the .NET nanoFramework SDK for AWS IoT Core.
-To be used in .NET nanoFramework C# projects targeting AWS IoT Core.</description>
-    <tags>nanoFramework C# csharp netmf netnf AWS IoT Core nanoFramework.Aws.IoTCore.Devices</tags>
+    <description>This package includes the .NET nanoFramework.Aws.IoTCore.Devices assembly for nanoFramework C# projects.&#10;This is an SDK for Aws IoTCore.</description>
+    <tags>nanoFramework C# csharp netmf netnf AWS IoTCore nanoFramework.Aws.IoTCore.Devices</tags>
     <dependencies>
       <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
       <dependency id="nanoFramework.Json" version="2.1.1-preview.8" />
@@ -38,6 +38,7 @@ To be used in .NET nanoFramework C# projects targeting AWS IoT Core.</descriptio
     <file src="nanoFramework.Aws.IoTCore.Devices\bin\Release\nanoFramework.Aws.IoTCore.Devices.pe" target="lib\nanoFramework.Aws.IoTCore.Devices.pe" />
     <file src="nanoFramework.Aws.IoTCore.Devices\bin\Release\nanoFramework.Aws.IoTCore.Devices.xml" target="lib\nanoFramework.Aws.IoTCore.Devices.xml" />
     <file src="assets\readme.txt" target="" />
+    <file src="README.md" target="docs\" />
     <file src="assets\nf-logo.png" target="images" />
     <file src="LICENSE.md" target="" />
   </files>

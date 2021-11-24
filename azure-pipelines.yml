@@ -2,7 +2,7 @@ trigger:
   branches:
     include: [main, develop, "release-*" ]
   paths:
-    exclude: [README.md, LICENSE.md, NuGet.Config, .github_changelog_generator, .gitignore]
+    exclude: [README.md, LICENSE.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, NuGet.Config, .github_changelog_generator, .gitignore]
   tags:
     include: ["v*"]
 
