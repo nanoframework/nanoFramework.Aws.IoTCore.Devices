@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/compare/v1.0.0-preview.53...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/compare/v1.0.0-preview.55...HEAD)
+
+**Documentation and other chores:**
+
+- Bumps nanoFramework.M2Mqtt from 5.0.2-preview.35 to 5.0.2-preview.37 [\#19](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/pull/19)
+
+## [v1.0.0-preview.55](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/tree/v1.0.0-preview.55) (2021-12-03)
+
+[Full Changelog](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/compare/v1.0.0-preview.53...v1.0.0-preview.55)
 
 **Documentation and other chores:**
 
