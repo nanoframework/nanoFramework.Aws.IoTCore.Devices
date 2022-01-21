@@ -53,7 +53,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="nanoFramework.M2Mqtt, Version=5.0.2.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.M2Mqtt.5.0.2-preview.59\lib\nanoFramework.M2Mqtt.dll</HintPath>
+      <HintPath>..\packages\nanoFramework.M2Mqtt.5.0.2-preview.61\lib\nanoFramework.M2Mqtt.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nanoFramework.Runtime.Events, Version=1.10.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
@@ -73,7 +73,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.System.Net.1.8.0-preview.13\lib\System.Net.dll</HintPath>
+      <HintPath>..\packages\nanoFramework.System.Net.1.8.0-preview.15\lib\System.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Threading, Version=1.0.4.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
