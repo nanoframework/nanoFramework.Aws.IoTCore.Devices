@@ -6,6 +6,7 @@
 
 **Documentation and other chores:**
 
+- Update 2 NuGet dependencies [\#89](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/pull/89)
 - Update 2 NuGet dependencies [\#88](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/pull/88)
 - Update 1 NuGet dependencies [\#87](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/pull/87)
 - release-v1.0.0 [\#82](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/pull/82)
