@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/compare/v1.1.8...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/compare/v1.1.10...HEAD)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#97](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/pull/97)
+
+## [v1.1.10](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/tree/v1.1.10) (2022-07-19)
+
+[Full Changelog](https://github.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/compare/v1.1.8...v1.1.10)
 
 **Documentation and other chores:**
 
