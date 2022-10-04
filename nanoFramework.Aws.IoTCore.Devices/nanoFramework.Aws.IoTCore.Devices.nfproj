@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Nerdbank.GitVersioning.3.5.113\build\Nerdbank.GitVersioning.props" Condition="Exists('..\packages\Nerdbank.GitVersioning.3.5.113\build\Nerdbank.GitVersioning.props')" />
   <PropertyGroup Label="Globals">
@@ -17,6 +17,8 @@
     <AssemblyName>nanoFramework.Aws.IoTCore.Devices</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
     <DocumentationFile>bin\$(Configuration)\nanoFramework.Aws.IoTCore.Devices.xml</DocumentationFile>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode Condition="'$(TF_BUILD)' == 'True' or '$(ContinuousIntegrationBuild)' == 'True'">true</RestoreLockedMode>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -44,10 +46,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+    <ItemGroup>
+    <None Include="packages.lock.json" />
+  </ItemGroup>
   <ItemGroup>
-    <Reference Include="mscorlib, Version=1.12.0.4, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+    <Reference Include="mscorlib">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.12.0\lib\mscorlib.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="nanoFramework.Json, Version=2.2.34.8594, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.Json.2.2.34\lib\nanoFramework.Json.dll</HintPath>
