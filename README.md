@@ -1,7 +1,6 @@
 ﻿
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=nanoFramework.Aws.IoTCore.Devices&metric=alert_status)](https://sonarcloud.io/dashboard?id=nanoFramework.Aws.IoTCore.Devices)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=nanoFramework.Aws.IoTCore.Devices&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=nanoframework.Aws.IoTCore.Devices)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![NuGet](https://img.shields.io/nuget/dt/nanoFramework.Aws.IoTCore.Devices.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Aws.IoTCore.Devices/)
 [![#yourfirstpr](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://github.com/nanoframework/Home/blob/main/CONTRIBUTING.md)
 [![Discord](https://img.shields.io/discord/478725473862549535.svg?logo=discord&logoColor=white&label=Discord&color=7289DA)](https://discord.gg/gCyBu8T)
@@ -122,14 +121,14 @@ if (shadow == null)
 Debug.WriteLine($"Shadow ClientToken: {shadow.DeviceId}, #desired: {shadow.status.desired}, #reported: {shadow.status.reported}");
 ```
 
-Note: it's important to use a `CancellationToken` that be cancelled after a certain amount of time. Otherwise, this will be blocking the thread up to the point the shadow will be received. 
+Note: it's important to use a `CancellationToken` that be cancelled after a certain amount of time. Otherwise, this will be blocking the thread up to the point the shadow will be received.
 
 Shadows have status properties, reported and desired. They are a hashtable and you can get or try to get any element.
 
 You can report your Shadow as simple as this:
 
-
 TODO: does not work yet!!!
+
 ```csharp
 ShadowCollection reported = new ShadowCollection();
 reported.Add("firmware", "myNano");
@@ -171,7 +170,6 @@ awsIoT.SendMessage($"{{\"Temperature\":42,\"Pressure\":1024}}");
 
 You can register an event to receive Cloud to device messages:
 
-
 TODO: check works!!!
 
 ```csharp
@@ -204,7 +202,6 @@ void CloudToDeviceMessageEvent(object sender, CloudToDeviceMessageEventArgs e)
 
 Note: the `sender` is a `MqttConnectionClient` class, you can then send a message back with a confirmation or any logic you've put in place.
 
-
 ### Status update event
 
 A status update event is available:
@@ -225,15 +222,13 @@ void StatusUpdatedEvent(object sender, StatusUpdatedEventArgs e)
 
 Note that they are status change based, so once the connect or disconnect event arrives, they'll be replaced by other events as soon as something else happened like receiving a shadow.
 
+## Future work items for discussion
 
-## Future work items for discussion:
-
-* Better documentation about ensuring "persistent" connections (or not) with documentation (including cloud policy doc for support)
-* Add some integration tests, including (scripts to auto provision cloud broker (and/or)) manual setup documents to ensure ease of use.
-* Partial Greengrass support?!
-* Websocket support?!
-* fleet provisioning support?!
-
+- Better documentation about ensuring "persistent" connections (or not) with documentation (including cloud policy doc for support)
+- Add some integration tests, including (scripts to auto provision cloud broker (and/or)) manual setup documents to ensure ease of use.-
+- Partial Greengrass support?!
+- Websocket support?!
+- fleet provisioning support?!
 
 ## Feedback and documentation
 
