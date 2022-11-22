@@ -277,7 +277,13 @@ namespace nanoFramework.Aws.IoTCore.Devices
                 topic = $"{_shadowTopic}/name/{namedShadow}/get";
             }
 
-            _mqttc.Publish(topic, Encoding.UTF8.GetBytes(""), MqttQoSLevel.AtLeastOnce, false);
+            _mqttc.Publish(
+                topic,
+                Encoding.UTF8.GetBytes(""),
+                null,
+                new ArrayList(),
+                MqttQoSLevel.AtLeastOnce,
+                false);
 
             while (!_shadowReceived && !cancellationToken.IsCancellationRequested)
             {
@@ -304,7 +310,13 @@ namespace nanoFramework.Aws.IoTCore.Devices
 
             string shadow = shadowToSend.ToJson(true);
             Debug.WriteLine($"updatereportedstate shadow content: {shadow}");
-            var rid = _mqttc.Publish(topic, Encoding.UTF8.GetBytes(shadow), MqttQoSLevel.AtLeastOnce, false);
+            var rid = _mqttc.Publish(
+                topic,
+                Encoding.UTF8.GetBytes(shadow),
+                null,
+                new ArrayList(),
+                MqttQoSLevel.AtLeastOnce,
+                false);
             _mqttBrokerStatus.State = ConnectorStateMessage.ShadowUpdated;
             _mqttBrokerStatus.Message = string.Empty;
             StatusUpdated?.Invoke(this, new StatusUpdatedEventArgs(_mqttBrokerStatus));
@@ -334,7 +346,13 @@ namespace nanoFramework.Aws.IoTCore.Devices
         public bool SendMessage(string message, CancellationToken cancellationToken = default)
         {
 
-            var rid = _mqttc.Publish(_telemetryTopic, Encoding.UTF8.GetBytes(message), QosLevel, false);
+            var rid = _mqttc.Publish(
+                _telemetryTopic,
+                Encoding.UTF8.GetBytes(message),
+                null,
+                new ArrayList(),
+                QosLevel,
+                false);
 
             if (cancellationToken.CanBeCanceled)
             {
