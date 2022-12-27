@@ -7,7 +7,7 @@ name: Daily update dependencies
 
 on:
   schedule:
-  - cron:  '00 00 * * *'
+  - cron:  '00 10 * * Mon,Thu'
   repository_dispatch:
     types: update-dependencies
 
@@ -15,7 +15,6 @@ jobs:
   update-nuget-dependencies:
     name: Update dependencies
     uses: nanoframework/nf-tools/.github/workflows/update-dependencies.yml@main
+    secrets: inherit
     with:
       solutionsToCheck: 'nanoFramework.Aws.IoTCore.Devices.sln'
-    secrets:
-      githubAuth: ${{ secrets.NFBOT_GITHUB_ACTIONS }}
