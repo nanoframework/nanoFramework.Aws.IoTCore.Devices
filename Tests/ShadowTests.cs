@@ -12,26 +12,26 @@ namespace nanoFramework.Aws.IoTCore.Devices.Tests
     public class ShadowTests
     {
         [TestMethod]
-        public void get_shadow_json_to_class()
+        public void Get_shadow_json_to_class()
         {
             var json = ShadowJsonMessageExamples.Get_AcceptedShadow;
         }
 
         [TestMethod]
-        public void get_shadow_class_to_json()
+        public void Get_shadow_class_to_json()
         {
             //technically un-necessary, but a good check!
             // need to make sure the above method passes before attempting this!
         }
 
         [TestMethod]
-        public void update_shadow_recieved_json_to_class()
+        public void Update_shadow_recieved_json_to_class()
         {
             var json = ShadowJsonMessageExamples.Update_AcceptedShadow;
         }
 
         [TestMethod]
-        public void create_update_shadow_to_send_class()
+        public void Create_update_shadow_to_send_class()
         {
             //technically un-necessary, but a good check!
             //in the real world, this would be a different class.
@@ -39,7 +39,7 @@ namespace nanoFramework.Aws.IoTCore.Devices.Tests
         }
 
         [TestMethod]
-        public void update_delta_shadow_received_json_to_class()
+        public void Update_delta_shadow_received_json_to_class()
         {
             //TODO: there is no reference for this (yet).
         }
