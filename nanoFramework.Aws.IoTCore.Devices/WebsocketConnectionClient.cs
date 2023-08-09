@@ -15,13 +15,26 @@ namespace nanoFramework.Aws.IoTCore.Devices
     public class WebsocketConnectionClient : IDisposable
     {
 
-        public Uri Host { get; set; }
+        /// <summary>
+        /// The AWS IoT Core fully qualified domain name
+        /// </summary>
+        public Uri EndpointUri { get; set; }
+        /// <summary>
+        /// The AWS IoT Core Region
+        /// </summary>
         public string Region { get; set; }
+        /// <summary>
+        /// The AWS IoT Core Access Key
+        /// </summary>
         public string AccessKey { get; set; }
+        /// <summary>
+        /// The AWS IoT Core Secret Key
+        /// </summary>
         public string SecretKey { get; set; }
+
         const int _wssPort = 443; //Default WSS port.
 
-        WebSocket _webSocket = null;
+        //WebSocket _webSocket = null;
 
         /// <summary>
         /// Creates a new MQTT over WebSocket Connection Client
@@ -37,9 +50,9 @@ namespace nanoFramework.Aws.IoTCore.Devices
             //wss://iot-endpoint/mqtt
 
             // sign with Signature Version 4
-            var signer = new SignerForQueryParameterAuth
+            var v4signer = new SignerForQueryParameterAuth
             {
-                EndpointUri = Host,
+                EndpointUri = EndpointUri,
                 HttpMethod = "GET",
                 Service = "iotdevicegateway",
                 Region = Region

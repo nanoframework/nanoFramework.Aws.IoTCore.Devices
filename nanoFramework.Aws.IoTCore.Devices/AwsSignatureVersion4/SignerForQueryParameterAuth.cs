@@ -1,11 +1,15 @@
 ﻿
+//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
+
 using System;
 using System.Collections;
-using System.Globalization;
-using System.Net.Http.Headers;
-using System.Net.Http;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 
 namespace nanoFramework.Aws.SignatureVersion4
 {
@@ -39,33 +43,28 @@ namespace nanoFramework.Aws.SignatureVersion4
         /// <returns>
         /// The string expressing the Signature V4 components to add to query parameters.
         /// </returns>
-        public string ComputeSignature(IDictionary<string, string> headers,
+        public string ComputeSignature(IDictionary headers,
                                        string queryParameters,
                                        string bodyHash,
                                        string awsAccessKey,
                                        string awsSecretKey)
         {
-            // first get the date and time for the subsequent request, and convert to ISO 8601 format
+            // first get the date and time for the subsequent request, and convert to ISO8601 format (without '-' and ':')
             // for use in signature generation
             var requestDateTime = DateTime.UtcNow;
             var dateTimeStamp = requestDateTime.ToString(ISO8601BasicFormat);
 
             // extract the host portion of the endpoint to include in the signature calculation,
             // unless already set
-            if (!headers.ContainsKey("Host"))
+            if (!headers.Contains("Host"))
             {
                 var hostHeader = EndpointUri.Host;
-                if (!EndpointUri.IsDefaultPort)
-                    hostHeader += ":" + EndpointUri.Port;
+                hostHeader += ":" + EndpointUri.Port; // FIXME: should use //if (!EndpointUri.IsDefaultPort)
                 headers.Add("Host", hostHeader);
             }
 
             var dateStamp = requestDateTime.ToString(DateStringFormat);
-            var scope = string.Format("{0}/{1}/{2}/{3}",
-                                      dateStamp,
-                                      Region,
-                                      Service,
-                                      TERMINATOR);
+            var scope = $"{dateStamp}/{Region}/{Service}/{TERMINATOR}";
 
             // canonicalized headers need to be expressed in the query
             // parameters processed in the signature
@@ -76,33 +75,46 @@ namespace nanoFramework.Aws.SignatureVersion4
             // Signature V4 and (b) canonicalize the set before they go into the
             // signature calculation. Note that this assumes parameter names and 
             // values added outside this routine are already url encoded
-            var paramDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var paramDictionary = new Hashtable();
             if (!string.IsNullOrEmpty(queryParameters))
             {
-                paramDictionary = queryParameters.Split('&').Select(p => p.Split('='))
-                                                     .ToDictionary(nameval => nameval[0],
-                                                                   nameval => nameval.Length > 1
-                                                                        ? nameval[1] : "");
+                var qparam = queryParameters.Split('&');
+                foreach (string p in qparam)
+                {
+                    var items = p.Split('=');
+                    if (items.Length == 1)
+                    {
+                        paramDictionary.Add(items[0], null);
+                    }
+                    else
+                    {
+                        paramDictionary.Add(items[0], items[1]);
+                    }
+                }
             }
 
             // add the fixed authorization params required by Signature V4
-            paramDictionary.Add(X_Amz_Algorithm, HttpHelpers.UrlEncode(string.Format("{0}-{1}", SCHEME, ALGORITHM)));
-            paramDictionary.Add(X_Amz_Credential, HttpHelpers.UrlEncode(string.Format("{0}/{1}", awsAccessKey, scope)));
-            paramDictionary.Add(X_Amz_SignedHeaders, HttpHelpers.UrlEncode(canonicalizedHeaderNames));
+            paramDictionary.Add(X_Amz_Algorithm, HttpUtility.UrlEncode($"{SCHEME}-{ALGORITHM}"));
+            paramDictionary.Add(X_Amz_Credential, HttpUtility.UrlEncode($"{awsAccessKey}/{scope}"));
+            paramDictionary.Add(X_Amz_SignedHeaders, HttpUtility.UrlEncode(canonicalizedHeaderNames));
 
             // x-amz-date is now added as a query parameter, not a header, but still needs to be in ISO8601 basic form
-            paramDictionary.Add(X_Amz_Date, HttpHelpers.UrlEncode(dateTimeStamp));
+            paramDictionary.Add(X_Amz_Date, HttpUtility.UrlEncode(dateTimeStamp));
 
             // build the expanded canonical query parameter string that will go into the
             // signature computation
             var sb = new StringBuilder();
-            var paramKeys = new List<string>(paramDictionary.Keys);
+            var paramKeys = new ArrayList();
+            foreach (DictionaryEntry kvp in paramDictionary)
+            {
+                paramKeys.Add(kvp.Key);
+            }
             paramKeys.Sort(StringComparer.Ordinal);
             foreach (var p in paramKeys)
             {
                 if (sb.Length > 0)
                     sb.Append("&");
-                sb.Append(string.Format("{0}={1}", p, paramDictionary[p]));
+                sb.Append($"{p}={paramDictionary[p]}");
             }
             var canonicalizedQueryParameters = sb.ToString();
 
@@ -113,7 +125,7 @@ namespace nanoFramework.Aws.SignatureVersion4
                                                        canonicalizedHeaderNames,
                                                        canonicalizedHeaders,
                                                        bodyHash);
-            //Logger.LogDebug($"\nCanonicalRequest:\n{canonicalRequest}");
+            Debug.WriteLine($"\nCanonicalRequest:\n{canonicalRequest}");
 
             byte[] canonicalRequestHashBytes
                 = CanonicalRequestHashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(canonicalRequest));
@@ -121,20 +133,19 @@ namespace nanoFramework.Aws.SignatureVersion4
             // construct the string to be signed
             var stringToSign = new StringBuilder();
 
-            stringToSign.Append(string.Format("{0}-{1}\n{2}\n{3}\n", SCHEME, ALGORITHM, dateTimeStamp, scope));
+            stringToSign.Append($"{SCHEME}-{ALGORITHM}\n{dateTimeStamp}\n{scope}\n");
             stringToSign.Append(ToHexString(canonicalRequestHashBytes, true));
 
-            //Logger.LogDebug($"\nStringToSign:\n{stringToSign}");
+            Debug.WriteLine($"\nStringToSign:\n{stringToSign}");
 
             // compute the multi-stage signing key
-            KeyedHashAlgorithm kha = KeyedHashAlgorithm.Create(HMACSHA256);
-            kha.Key = DeriveSigningKey(HMACSHA256, awsSecretKey, Region, dateStamp, Service);
+            var kha = new HMACSHA256(DeriveSigningKey(awsSecretKey, Region, dateStamp, Service));
 
             // compute the final signature for the request, place into the result and return to the 
             // user to be embedded in the request as needed
             var signature = kha.ComputeHash(Encoding.UTF8.GetBytes(stringToSign.ToString()));
             var signatureString = ToHexString(signature, true);
-            //Logger.LogDebug($"\nSignature:\n{signatureString}");
+            Debug.WriteLine($"\nSignature:\n{signatureString}");
 
             // form up the authorization parameters for the caller to place in the query string
             var authString = new StringBuilder();
@@ -150,13 +161,13 @@ namespace nanoFramework.Aws.SignatureVersion4
             {
                 if (authString.Length > 0)
                     authString.Append("&");
-                authString.Append(string.Format("{0}={1}", p, paramDictionary[p]));
+                authString.Append($"{p}={paramDictionary[p]}");
             }
 
-            authString.Append(string.Format("&{0}={1}", X_Amz_Signature, signatureString));
+            authString.Append($"&{X_Amz_Signature}={signatureString}");
 
             var authorization = authString.ToString();
-            //Logger.LogDebug($"\nAuthorization:\n{authorization}");
+            Debug.WriteLine($"\nAuthorization:\n{authorization}");
 
             return authorization;
         }

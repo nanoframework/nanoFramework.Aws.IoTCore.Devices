@@ -1,7 +1,11 @@
-﻿//using System;
+﻿////
+//// Copyright (c) .NET Foundation and Contributors
+//// See LICENSE file in the project root for full license information.
+////
+
+//using System;
 //using System.Collections;
-//using System.Globalization;
-//using System.Net.Http;
+//using System.Diagnostics;
 //using System.Security.Cryptography;
 //using System.Text;
 
@@ -38,23 +42,22 @@
 //        /// The computed authorization string for the request. This value needs to be set as the 
 //        /// header 'Authorization' on the subsequent HTTP request.
 //        /// </returns>
-//        public string ComputeSignature(IDictionary<string, string> headers,
+//        public string ComputeSignature(IDictionary headers,
 //                                       string queryParameters,
 //                                       string bodyHash,
 //                                       string awsAccessKey,
 //                                       string awsSecretKey)
 //        {
-//            // first get the date and time for the subsequent request, and convert to ISO 8601 format
+//            // first get the date and time for the subsequent request, and convert to ISO8601 format (without '-' and ':')
 //            // for use in signature generation
 //            var requestDateTime = DateTime.UtcNow;
-//            var dateTimeStamp = requestDateTime.ToString(ISO8601BasicFormat, CultureInfo.InvariantCulture);
+//            var dateTimeStamp = requestDateTime.ToString(ISO8601BasicFormat);
 
 //            // update the headers with required 'x-amz-date' and 'host' values
 //            headers.Add(X_Amz_Date, dateTimeStamp);
 
 //            var hostHeader = EndpointUri.Host;
-//            if (!EndpointUri.IsDefaultPort)
-//                hostHeader += ":" + EndpointUri.Port;
+//            hostHeader += ":" + EndpointUri.Port; // FIXME: should use //if (!EndpointUri.IsDefaultPort)
 //            headers.Add("Host", hostHeader);
 
 //            // canonicalize the headers; we need the set of header names as well as the
@@ -67,19 +70,36 @@
 //            var canonicalizedQueryParameters = string.Empty;
 //            if (!string.IsNullOrEmpty(queryParameters))
 //            {
-//                var paramDictionary = queryParameters.Split('&').Select(p => p.Split('='))
-//                                                     .ToDictionary(nameval => nameval[0],
-//                                                                   nameval => nameval.Length > 1
-//                                                                        ? nameval[1] : "");
+//                var paramDictionary = new Hashtable();
+
+//                var qparam = queryParameters.Split('&');
+//                foreach (string p in qparam)
+//                {
+//                    var items = p.Split('=');
+//                    if (items.Length == 1)
+//                    {
+//                        paramDictionary.Add(items[0], null);
+//                    }
+//                    else
+//                    {
+//                        paramDictionary.Add(items[0], items[1]);
+//                    }
+//                }
 
 //                var sb = new StringBuilder();
-//                var paramKeys = new List<string>(paramDictionary.Keys);
+//                var paramKeys = new ArrayList();
+
+//                foreach (DictionaryEntry kvp in paramDictionary)
+//                {
+//                    paramKeys.Add(kvp.Key);
+//                }
+
 //                paramKeys.Sort(StringComparer.Ordinal);
 //                foreach (var p in paramKeys)
 //                {
 //                    if (sb.Length > 0)
 //                        sb.Append("&");
-//                    sb.AppendFormat("{0}={1}", p, paramDictionary[p]);
+//                    sb.Append($"{p}={paramDictionary[p]}");
 //                }
 
 //                canonicalizedQueryParameters = sb.ToString();
@@ -92,7 +112,7 @@
 //                                                       canonicalizedHeaderNames,
 //                                                       canonicalizedHeaders,
 //                                                       bodyHash);
-//            Logger.LogDebug($"\nCanonicalRequest:\n{canonicalRequest}");
+//            Debug.WriteLine($"\nCanonicalRequest:\n{canonicalRequest}");
 
 //            // generate a hash of the canonical request, to go into signature computation
 //            var canonicalRequestHashBytes
@@ -101,35 +121,30 @@
 //            // construct the string to be signed
 //            var stringToSign = new StringBuilder();
 
-//            var dateStamp = requestDateTime.ToString(DateStringFormat, CultureInfo.InvariantCulture);
-//            var scope = string.Format("{0}/{1}/{2}/{3}",
-//                                      dateStamp,
-//                                      Region,
-//                                      Service,
-//                                      TERMINATOR);
+//            var dateStamp = requestDateTime.ToString(DateStringFormat);
+//            var scope = $"{dateStamp}/{Region}/{Service}/{TERMINATOR}";
 
-//            stringToSign.AppendFormat("{0}-{1}\n{2}\n{3}\n", SCHEME, ALGORITHM, dateTimeStamp, scope);
+//            stringToSign.Append($"{SCHEME}-{ALGORITHM}\n{dateTimeStamp}\n{scope}\n");
 //            stringToSign.Append(ToHexString(canonicalRequestHashBytes, true));
 
-//            Logger.LogDebug($"\nStringToSign:\n{stringToSign}");
+//            Debug.WriteLine($"\nStringToSign:\n{stringToSign}");
 
 //            // compute the signing key
-//            var kha = KeyedHashAlgorithm.Create(HMACSHA256);
-//            kha.Key = DeriveSigningKey(HMACSHA256, awsSecretKey, Region, dateStamp, Service);
+//            var kha = new HMACSHA256(DeriveSigningKey(awsSecretKey, Region, dateStamp, Service));
 
 //            // compute the AWS4 signature and return it
 //            var signature = kha.ComputeHash(Encoding.UTF8.GetBytes(stringToSign.ToString()));
 //            var signatureString = ToHexString(signature, true);
-//            Logger.LogDebug($"\nSignature:\n{signatureString}");
+//            Debug.WriteLine($"\nSignature:\n{signatureString}");
 
 //            var authString = new StringBuilder();
-//            authString.AppendFormat("{0}-{1} ", SCHEME, ALGORITHM);
-//            authString.AppendFormat("Credential={0}/{1}, ", awsAccessKey, scope);
-//            authString.AppendFormat("SignedHeaders={0}, ", canonicalizedHeaderNames);
-//            authString.AppendFormat("Signature={0}", signatureString);
+//            authString.Append($"{SCHEME}-{ALGORITHM} ");
+//            authString.Append($"Credential={awsAccessKey}/{scope}, ");
+//            authString.Append($"SignedHeaders={canonicalizedHeaderNames}, ");
+//            authString.Append($"Signature={signatureString}");
 
 //            var authorization = authString.ToString();
-//            Logger.LogDebug($"\nAuthorization:\n{authorization}");
+//            Debug.WriteLine($"\nAuthorization:\n{authorization}");
 
 //            return authorization;
 //        }

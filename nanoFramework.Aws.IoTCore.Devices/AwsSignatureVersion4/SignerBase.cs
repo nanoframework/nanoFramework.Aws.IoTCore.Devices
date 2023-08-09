@@ -1,9 +1,14 @@
-﻿using System;
+﻿//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
+
+using System;
 using System.Collections;
-using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace nanoFramework.Aws.SignatureVersion4
 {
@@ -13,36 +18,33 @@ namespace nanoFramework.Aws.SignatureVersion4
     public abstract class SignerBase
     {
         // SHA256 hash of an empty request body
-        public const string EMPTY_BODY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+        internal const string EMPTY_BODY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
-        public const string SCHEME = "AWS4";
-        public const string ALGORITHM = "HMAC-SHA256";
-        public const string TERMINATOR = "aws4_request";
+        internal const string SCHEME = "AWS4";
+        internal const string ALGORITHM = "HMAC-SHA256";
+        internal const string TERMINATOR = "aws4_request";
 
         // format strings for the date/time and date stamps required during signing
-        public const string ISO8601BasicFormat = "yyyyMMddTHHmmssZ";
-        public const string DateStringFormat = "yyyyMMdd";
+        internal const string ISO8601BasicFormat = "yyyyMMddTHHmmssZ";
+        internal const string DateStringFormat = "yyyyMMdd";
 
         // some common x-amz-* parameters
-        public const string X_Amz_Algorithm = "X-Amz-Algorithm";
-        public const string X_Amz_Credential = "X-Amz-Credential";
-        public const string X_Amz_SignedHeaders = "X-Amz-SignedHeaders";
-        public const string X_Amz_Date = "X-Amz-Date";
-        public const string X_Amz_Signature = "X-Amz-Signature";
-        public const string X_Amz_Expires = "X-Amz-Expires";
-        public const string X_Amz_Content_SHA256 = "X-Amz-Content-SHA256";
-        public const string X_Amz_Decoded_Content_Length = "X-Amz-Decoded-Content-Length";
-        public const string X_Amz_Meta_UUID = "X-Amz-Meta-UUID";
-
-        // the name of the keyed hash algorithm used in signing
-        public const string HMACSHA256 = "HMACSHA256";
+        internal const string X_Amz_Algorithm = "X-Amz-Algorithm";
+        internal const string X_Amz_Credential = "X-Amz-Credential";
+        internal const string X_Amz_SignedHeaders = "X-Amz-SignedHeaders";
+        internal const string X_Amz_Date = "X-Amz-Date";
+        internal const string X_Amz_Signature = "X-Amz-Signature";
+        internal const string X_Amz_Expires = "X-Amz-Expires";
+        internal const string X_Amz_Content_SHA256 = "X-Amz-Content-SHA256";
+        internal const string X_Amz_Decoded_Content_Length = "X-Amz-Decoded-Content-Length";
+        internal const string X_Amz_Meta_UUID = "X-Amz-Meta-UUID";
 
         // request canonicalization requires multiple whitespace compression
-        protected static readonly Regex CompressWhitespaceRegex = new Regex("\\s+");
+        internal static readonly Regex CompressWhitespaceRegex = new Regex("\\s+");
 
         // algorithm used to hash the canonical request that is supplied to
         // the signature computation
-        public static HashAlgorithm CanonicalRequestHashAlgorithm = HashAlgorithm.Create("SHA-256");
+        internal static SHA256 CanonicalRequestHashAlgorithm = SHA256.Create();
 
         /// <summary>
         /// The service endpoint, including the path to any resource.
@@ -75,9 +77,13 @@ namespace nanoFramework.Aws.SignatureVersion4
         /// <returns>
         /// The set of header names canonicalized to a flattened, ;-delimited string
         /// </returns>
-        protected string CanonicalizeHeaderNames(IDictionary<string, string> headers)
+        protected string CanonicalizeHeaderNames(IDictionary headers)
         {
-            var headersToSign = new List<string>(headers.Keys);
+            var headersToSign = new ArrayList();
+            foreach (DictionaryEntry kvp in headers)
+            {
+                headersToSign.Add(kvp.Key);
+            }
             headersToSign.Sort(StringComparer.OrdinalIgnoreCase);
 
             var sb = new StringBuilder();
@@ -85,7 +91,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             {
                 if (sb.Length > 0)
                     sb.Append(";");
-                sb.Append(header.ToLower());
+                sb.Append(header.ToString().ToLower());
             }
             return sb.ToString();
         }
@@ -96,28 +102,29 @@ namespace nanoFramework.Aws.SignatureVersion4
         /// </summary>
         /// <param name="headers">The set of headers to be encoded</param>
         /// <returns>Canonicalized string of headers with values</returns>
-        protected virtual string CanonicalizeHeaders(IDictionary<string, string> headers)
+        protected virtual string CanonicalizeHeaders(IDictionary headers)
         {
             if (headers == null || headers.Count == 0)
                 return string.Empty;
 
-            // step1: sort the headers into lower-case format; we create a new
+            // step1: sort the headers using lower-case format; we create a new
             // map to ensure we can do a subsequent key lookup using a lower-case
             // key regardless of how 'headers' was created.
-            var sortedHeaderMap = new SortedDictionary<string, string>();
-            foreach (var header in headers.Keys)
+
+            var headerKeys = new ArrayList();
+            foreach (DictionaryEntry kvp in headers)
             {
-                sortedHeaderMap.Add(header.ToLower(), headers[header]);
+                headerKeys.Add(kvp.Key);
             }
+            headerKeys.Sort(StringComparer.OrdinalIgnoreCase);
 
             // step2: form the canonical header:value entries in sorted order. 
             // Multiple white spaces in the values should be compressed to a single 
             // space.
             var sb = new StringBuilder();
-            foreach (var header in sortedHeaderMap.Keys)
+            foreach (var p in headerKeys)
             {
-                var headerValue = CompressWhitespaceRegex.Replace(sortedHeaderMap[header], " ");
-                sb.AppendFormat("{0}:{1}\n", header, headerValue.Trim());
+                sb.Append($"{p.ToString().ToLower()}={CompressWhitespaceRegex.Replace(headers[p].ToString().Trim(), " ")}\n");
             }
 
             return sb.ToString();
@@ -149,12 +156,12 @@ namespace nanoFramework.Aws.SignatureVersion4
         {
             var canonicalRequest = new StringBuilder();
 
-            canonicalRequest.Append(string.Format("{0}\n", httpMethod));
-            canonicalRequest.Append(string.Format("{0}\n", CanonicalResourcePath(endpointUri)));
-            canonicalRequest.Append(string.Format("{0}\n", queryParameters));
+            canonicalRequest.Append($"{httpMethod}\n");
+            canonicalRequest.Append($"{CanonicalResourcePath(endpointUri)}\n");
+            canonicalRequest.Append($"{queryParameters}\n");
 
-            canonicalRequest.Append(string.Format("{0}\n", canonicalizedHeaders));
-            canonicalRequest.Append(string.Format("{0}\n", canonicalizedHeaderNames));
+            canonicalRequest.Append($"{canonicalizedHeaders}\n");
+            canonicalRequest.Append($"{canonicalizedHeaderNames}\n");
 
             canonicalRequest.Append(bodyHash);
 
@@ -172,43 +179,39 @@ namespace nanoFramework.Aws.SignatureVersion4
                 return "/";
 
             // encode the path per RFC3986
-            return HttpHelpers.UrlEncode(endpointUri.AbsolutePath, true);
+            return HttpUtility.UrlEncode(endpointUri.AbsolutePath); // TODO: check if hash ('#') is allowed/supported as per original implementation.
         }
 
         /// <summary>
         /// Compute and return the multi-stage signing key for the request.
         /// </summary>
-        /// <param name="algorithm">Hashing algorithm to use</param>
         /// <param name="awsSecretAccessKey">The clear-text AWS secret key</param>
         /// <param name="region">The region in which the service request will be processed</param>
         /// <param name="date">Date of the request, in yyyyMMdd format</param>
         /// <param name="service">The name of the service being called by the request</param>
         /// <returns>Computed signing key</returns>
-        protected byte[] DeriveSigningKey(string algorithm, string awsSecretAccessKey, string region, string date, string service)
+        protected byte[] DeriveSigningKey(string awsSecretAccessKey, string region, string date, string service)
         {
             const string ksecretPrefix = SCHEME;
-            char[] ksecret = null;
 
-            ksecret = (ksecretPrefix + awsSecretAccessKey).ToCharArray();
+            string ksecret = (ksecretPrefix + awsSecretAccessKey);
 
-            byte[] hashDate = ComputeKeyedHash(algorithm, Encoding.UTF8.GetBytes(ksecret), Encoding.UTF8.GetBytes(date));
-            byte[] hashRegion = ComputeKeyedHash(algorithm, hashDate, Encoding.UTF8.GetBytes(region));
-            byte[] hashService = ComputeKeyedHash(algorithm, hashRegion, Encoding.UTF8.GetBytes(service));
-            return ComputeKeyedHash(algorithm, hashService, Encoding.UTF8.GetBytes(TERMINATOR));
+            byte[] hashDate = ComputeKeyedHash(Encoding.UTF8.GetBytes(ksecret), Encoding.UTF8.GetBytes(date));
+            byte[] hashRegion = ComputeKeyedHash(hashDate, Encoding.UTF8.GetBytes(region));
+            byte[] hashService = ComputeKeyedHash(hashRegion, Encoding.UTF8.GetBytes(service));
+            return ComputeKeyedHash(hashService, Encoding.UTF8.GetBytes(TERMINATOR));
         }
 
         /// <summary>
         /// Compute and return the hash of a data blob using the specified algorithm
         /// and key
         /// </summary>
-        /// <param name="algorithm">Algorithm to use for hashing</param>
         /// <param name="key">Hash key</param>
         /// <param name="data">Data blob</param>
         /// <returns>Hash of the data</returns>
-        protected byte[] ComputeKeyedHash(string algorithm, byte[] key, byte[] data)
+        protected byte[] ComputeKeyedHash(byte[] key, byte[] data)
         {
-            var kha = KeyedHashAlgorithm.Create(algorithm);
-            kha.Key = key;
+            var kha = new HMACSHA256(key);
             return kha.ComputeHash(data);
         }
 
