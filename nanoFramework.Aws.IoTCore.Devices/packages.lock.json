@@ -68,6 +68,12 @@
         "resolved": "1.2.54",
         "contentHash": "k3OutSNRMs9di42LQ+5GbpHBY07aMEZWGkaS3Mj3ZU4cWqJc4deFGzRd+LBFQl1mRGdQaM5sl/euTZdcg8R9Zg=="
       },
+      "nanoFramework.System.Text.RegularExpressions": {
+        "type": "Direct",
+        "requested": "[1.1.37, 1.1.37]",
+        "resolved": "1.1.37",
+        "contentHash": "l0Vv7SEF2+59Ps183Sf8sSVZKvfFBPRP5gTYtnv5cdEm+KntXRhIy3u9Cp8XnueMrLkHEKYDQ6VG6gz4n7tbfA=="
+      },
       "nanoFramework.System.Threading": {
         "type": "Direct",
         "requested": "[1.1.32, 1.1.32]",
