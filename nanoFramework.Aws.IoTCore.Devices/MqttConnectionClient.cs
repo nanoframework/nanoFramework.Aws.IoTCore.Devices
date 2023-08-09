@@ -51,7 +51,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
         private readonly X509Certificate2 _clientCert; //Combined ClientRsaSha256Crt and ClientRsaKey
         private readonly X509Certificate _awsRootCACert;
 
-        private M2Mqtt.MqttClient _mqttc;
+        private M2Mqtt.MqttClient _mqttc = null;
         private readonly ConnectorState _mqttBrokerStatus = new ConnectorState();
         private readonly ArrayList _waitForConfirmation = new ArrayList();
         private readonly object _lock = new object();
@@ -243,18 +243,22 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// </summary>
         public void Close()
         {
-            if (_mqttc.IsConnected)
+            if (_mqttc != null)
             {
-                _mqttc.Unsubscribe(new[] {
+                if (_mqttc.IsConnected)
+                {
+                    _mqttc.Unsubscribe(new[] {
                     $"{_deviceMessageTopic}/#",
                     $"{ _shadowTopic }/#",
                     });
+                }
                 _mqttc.Disconnect();
+                _mqttc.Close();
                 // Make sure all get disconnected, cleared (TODO: 1 second arbitrary value specified)
                 Thread.Sleep(1000);
             }
 
-            _timerTokenRenew.Dispose();
+            _timerTokenRenew?.Dispose();
         }
 
         /// <summary>
