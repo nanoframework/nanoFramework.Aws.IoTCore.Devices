@@ -1,343 +1,343 @@
-﻿////
-//// Copyright (c) .NET Foundation and Contributors
-//// See LICENSE file in the project root for full license information.
-////
+﻿//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
 
-//using System;
-//using System.Collections;
-//using System.Diagnostics;
-//using System.Security.Cryptography;
-//using System.Text;
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
 
 
-//namespace nanoFramework.Aws.SignatureVersion4
-//{
-//    /// <summary>
-//    /// AWS Signature Version 4 signer for signing 'chunked' uploads
-//    /// using an Authorization header.
-//    /// </summary>
-//    public class SignerForChunkedUpload : SignerBase
-//    {
-//        // SHA256 substitute marker used in place of x-amz-content-sha256 when employing 
-//        // chunked uploads
-//        internal const string STREAMING_BODY_SHA256 = "STREAMING-AWS4-HMAC-SHA256-PAYLOAD";
+namespace nanoFramework.Aws.SignatureVersion4
+{
+    /// <summary>
+    /// AWS Signature Version 4 signer for signing 'chunked' uploads
+    /// using an Authorization header.
+    /// </summary>
+    public class SignerForChunkedUpload : SignerBase
+    {
+        // SHA256 substitute marker used in place of x-amz-content-sha256 when employing 
+        // chunked uploads
+        internal const string STREAMING_BODY_SHA256 = "STREAMING-AWS4-HMAC-SHA256-PAYLOAD";
 
-//        static readonly string CLRF = "\r\n";
-//        static readonly string CHUNK_STRING_TO_SIGN_PREFIX = "AWS4-HMAC-SHA256-PAYLOAD";
-//        static readonly string CHUNK_SIGNATURE_HEADER = ";chunk-signature=";
-//        static readonly int SIGNATURE_LENGTH = 64;
-//        static byte[] FINAL_CHUNK = new byte[0];
+        static readonly string CLRF = "\r\n";
+        static readonly string CHUNK_STRING_TO_SIGN_PREFIX = "AWS4-HMAC-SHA256-PAYLOAD";
+        static readonly string CHUNK_SIGNATURE_HEADER = ";chunk-signature=";
+        static readonly int SIGNATURE_LENGTH = 64;
+        static byte[] FINAL_CHUNK = new byte[0];
 
-//        /// <summary>
-//        /// Tracks the previously computed signature value; for chunk 0 this will
-//        /// contain the signature included in the Authorization header. For subsequent
-//        /// chunks it contains the computed signature of the prior chunk.
-//        /// </summary>
-//        public string LastComputedSignature { get; private set; }
+        /// <summary>
+        /// Tracks the previously computed signature value; for chunk 0 this will
+        /// contain the signature included in the Authorization header. For subsequent
+        /// chunks it contains the computed signature of the prior chunk.
+        /// </summary>
+        public string LastComputedSignature { get; private set; }
 
-//        /// <summary>
-//        /// Date and time of the original signing computation, in ISO 8601 basic format,
-//        /// reused for each chunk
-//        /// </summary>
-//        public string DateTimeStamp { get; private set; }
+        /// <summary>
+        /// Date and time of the original signing computation, in ISO 8601 basic format,
+        /// reused for each chunk
+        /// </summary>
+        public string DateTimeStamp { get; private set; }
 
-//        /// <summary>
-//        /// The scope value of the original signing computation, reused for each chunk
-//        /// </summary>
-//        public string Scope { get; private set; }
+        /// <summary>
+        /// The scope value of the original signing computation, reused for each chunk
+        /// </summary>
+        public string Scope { get; private set; }
 
-//        /// <summary>
-//        /// The derived signing key used in the original signature computation and
-//        /// re-used for each chunk
-//        /// </summary>
-//        byte[] SigningKey { get; set; }
+        /// <summary>
+        /// The derived signing key used in the original signature computation and
+        /// re-used for each chunk
+        /// </summary>
+        byte[] SigningKey { get; set; }
 
-//        /// <summary>
-//        /// Computes an AWS4 signature for a request, ready for inclusion as an 
-//        /// 'Authorization' header.
-//        /// </summary>
-//        /// <param name="headers">
-//        /// The request headers; 'Host' and 'X-Amz-Date' will be added to this set.
-//        /// </param>
-//        /// <param name="queryParameters">
-//        /// Any query parameters that will be added to the endpoint. The parameters 
-//        /// should be specified in canonical format.
-//        /// </param>
-//        /// <param name="bodyHash">
-//        /// Precomputed SHA256 hash of the request body content; this value should also
-//        /// be set as the header 'X-Amz-Content-SHA256' for non-streaming uploads.
-//        /// </param>
-//        /// <param name="awsAccessKey">
-//        /// The user's AWS Access Key.
-//        /// </param>
-//        /// <param name="awsSecretKey">
-//        /// The user's AWS Secret Key.
-//        /// </param>
-//        /// <returns>
-//        /// The computed authorization string for the request. This value needs to be set as the 
-//        /// header 'Authorization' on the subsequent HTTP request.
-//        /// </returns>
-//        public string ComputeSignature(IDictionary headers,
-//                                       string queryParameters,
-//                                       string bodyHash,
-//                                       string awsAccessKey,
-//                                       string awsSecretKey)
-//        {
-//            // first get the date and time for the subsequent request, and convert to ISO8601 format (without '-' and ':')
-//            // for use in signature generation
-//            var requestDateTime = DateTime.UtcNow;
-//            DateTimeStamp = requestDateTime.ToString(ISO8601BasicFormat);
+        /// <summary>
+        /// Computes an AWS4 signature for a request, ready for inclusion as an 
+        /// 'Authorization' header.
+        /// </summary>
+        /// <param name="headers">
+        /// The request headers; 'Host' and 'X-Amz-Date' will be added to this set.
+        /// </param>
+        /// <param name="queryParameters">
+        /// Any query parameters that will be added to the endpoint. The parameters 
+        /// should be specified in canonical format.
+        /// </param>
+        /// <param name="bodyHash">
+        /// Precomputed SHA256 hash of the request body content; this value should also
+        /// be set as the header 'X-Amz-Content-SHA256' for non-streaming uploads.
+        /// </param>
+        /// <param name="awsAccessKey">
+        /// The user's AWS Access Key.
+        /// </param>
+        /// <param name="awsSecretKey">
+        /// The user's AWS Secret Key.
+        /// </param>
+        /// <returns>
+        /// The computed authorization string for the request. This value needs to be set as the 
+        /// header 'Authorization' on the subsequent HTTP request.
+        /// </returns>
+        public string ComputeSignature(IDictionary headers,
+                                       string queryParameters,
+                                       string bodyHash,
+                                       string awsAccessKey,
+                                       string awsSecretKey)
+        {
+            // first get the date and time for the subsequent request, and convert to ISO8601 format (without '-' and ':')
+            // for use in signature generation
+            var requestDateTime = DateTime.UtcNow;
+            DateTimeStamp = requestDateTime.ToString(ISO8601BasicFormat);
 
-//            // update the headers with required 'x-amz-date' and 'host' values
-//            headers.Add(X_Amz_Date, DateTimeStamp);
+            // update the headers with required 'x-amz-date' and 'host' values
+            headers.Add(X_Amz_Date, DateTimeStamp);
 
-//            var hostHeader = EndpointUri.Host;
-//            hostHeader += ":" + EndpointUri.Port; // FIXME: should use //if (!EndpointUri.IsDefaultPort)
-//            headers.Add("Host", hostHeader);
+            var hostHeader = EndpointUri.Host;
+            hostHeader += ":" + EndpointUri.Port; // FIXME: should use //if (!EndpointUri.IsDefaultPort)
+            headers.Add("Host", hostHeader);
 
-//            // canonicalize the headers; we need the set of header names as well as the
-//            // names and values to go into the signature process
-//            var canonicalizedHeaderNames = CanonicalizeHeaderNames(headers);
-//            var canonicalizedHeaders = CanonicalizeHeaders(headers);
+            // canonicalize the headers; we need the set of header names as well as the
+            // names and values to go into the signature process
+            var canonicalizedHeaderNames = CanonicalizeHeaderNames(headers);
+            var canonicalizedHeaders = CanonicalizeHeaders(headers);
 
-//            // if any query string parameters have been supplied, canonicalize them
-//            // (note this sample assumes any required url encoding has been done already)
-//            var canonicalizedQueryParameters = string.Empty;
-//            if (!string.IsNullOrEmpty(queryParameters))
-//            {
-//                var paramDictionary = new Hashtable();
+            // if any query string parameters have been supplied, canonicalize them
+            // (note this sample assumes any required url encoding has been done already)
+            var canonicalizedQueryParameters = string.Empty;
+            if (!string.IsNullOrEmpty(queryParameters))
+            {
+                var paramDictionary = new Hashtable();
 
-//                var qparam = queryParameters.Split('&');
-//                foreach (string p in qparam)
-//                {
-//                    var items = p.Split('=');
-//                    if (items.Length == 1)
-//                    {
-//                        paramDictionary.Add(items[0], null);
-//                    }
-//                    else
-//                    {
-//                        paramDictionary.Add(items[0], items[1]);
-//                    }
-//                }
+                var qparam = queryParameters.Split('&');
+                foreach (string p in qparam)
+                {
+                    var items = p.Split('=');
+                    if (items.Length == 1)
+                    {
+                        paramDictionary.Add(items[0], null);
+                    }
+                    else
+                    {
+                        paramDictionary.Add(items[0], items[1]);
+                    }
+                }
 
-//                var sb = new StringBuilder();
-//                var paramKeys = new ArrayList();
+                var sb = new StringBuilder();
+                var paramKeys = new ArrayList();
 
-//                foreach (DictionaryEntry kvp in paramDictionary)
-//                {
-//                    paramKeys.Add(kvp.Key);
-//                }
+                foreach (DictionaryEntry kvp in paramDictionary)
+                {
+                    paramKeys.Add(kvp.Key);
+                }
 
-//                paramKeys.Sort(StringComparer.Ordinal);
-//                foreach (var p in paramKeys)
-//                {
-//                    if (sb.Length > 0)
-//                        sb.Append("&");
-//                    sb.Append($"{p}={paramDictionary[p]}");
-//                }
+                paramKeys.Sort(StringComparer.Ordinal);
+                foreach (var p in paramKeys)
+                {
+                    if (sb.Length > 0)
+                        sb.Append("&");
+                    sb.Append($"{p}={paramDictionary[p]}");
+                }
 
-//                canonicalizedQueryParameters = sb.ToString();
-//            }
+                canonicalizedQueryParameters = sb.ToString();
+            }
 
-//            // canonicalize the various components of the request
-//            var canonicalRequest = CanonicalizeRequest(EndpointUri,
-//                                                       HttpMethod,
-//                                                       canonicalizedQueryParameters,
-//                                                       canonicalizedHeaderNames,
-//                                                       canonicalizedHeaders,
-//                                                       bodyHash);
-//            Debug.WriteLine($"\nCanonicalRequest:\n{canonicalRequest}");
+            // canonicalize the various components of the request
+            var canonicalRequest = CanonicalizeRequest(EndpointUri,
+                                                       HttpMethod,
+                                                       canonicalizedQueryParameters,
+                                                       canonicalizedHeaderNames,
+                                                       canonicalizedHeaders,
+                                                       bodyHash);
+            Debug.WriteLine($"\nCanonicalRequest:\n{canonicalRequest}");
 
-//            // generate a hash of the canonical request, to go into signature computation
-//            var canonicalRequestHashBytes
-//                = CanonicalRequestHashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(canonicalRequest));
+            // generate a hash of the canonical request, to go into signature computation
+            var canonicalRequestHashBytes
+                = CanonicalRequestHashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(canonicalRequest));
 
-//            // construct the string to be signed
-//            var stringToSign = new StringBuilder();
+            // construct the string to be signed
+            var stringToSign = new StringBuilder();
 
-//            var dateStamp = requestDateTime.ToString(DateStringFormat);
-//            Scope = $"{dateStamp}/{Region}/{Service}/{TERMINATOR}";
+            var dateStamp = requestDateTime.ToString(DateStringFormat);
+            Scope = $"{dateStamp}/{Region}/{Service}/{TERMINATOR}";
 
-//            stringToSign.Append($"{SCHEME}-{ALGORITHM}\n{DateTimeStamp}\n{Scope}\n");
-//            stringToSign.Append(ToHexString(canonicalRequestHashBytes, true));
+            stringToSign.Append($"{SCHEME}-{ALGORITHM}\n{DateTimeStamp}\n{Scope}\n");
+            stringToSign.Append(ToHexString(canonicalRequestHashBytes, true));
 
-//            Debug.WriteLine($"\nStringToSign:\n{stringToSign}");
+            Debug.WriteLine($"\nStringToSign:\n{stringToSign}");
 
-//            // compute the signing key
-//            SigningKey = DeriveSigningKey(awsSecretKey, Region, dateStamp, Service);
+            // compute the signing key
+            SigningKey = DeriveSigningKey(awsSecretKey, Region, dateStamp, Service);
 
-//            var kha = new HMACSHA256(SigningKey);
+            var kha = new HMACSHA256(SigningKey);
 
-//            // compute the AWS4 signature and return it
-//            var signature = kha.ComputeHash(Encoding.UTF8.GetBytes(stringToSign.ToString()));
-//            var signatureString = ToHexString(signature, true);
-//            Debug.WriteLine($"\nSignature:\n{signatureString}");
+            // compute the AWS4 signature and return it
+            var signature = kha.ComputeHash(Encoding.UTF8.GetBytes(stringToSign.ToString()));
+            var signatureString = ToHexString(signature, true);
+            Debug.WriteLine($"\nSignature:\n{signatureString}");
 
-//            // cache the computed signature ready for chunk 0 upload
-//            LastComputedSignature = signatureString;
+            // cache the computed signature ready for chunk 0 upload
+            LastComputedSignature = signatureString;
 
-//            var authString = new StringBuilder();
-//            authString.Append($"{SCHEME}-{ALGORITHM} ");
-//            authString.Append($"Credential={awsAccessKey}/{Scope}, ");
-//            authString.Append($"SignedHeaders={canonicalizedHeaderNames}, ");
-//            authString.Append($"Signature={signatureString}");
+            var authString = new StringBuilder();
+            authString.Append($"{SCHEME}-{ALGORITHM} ");
+            authString.Append($"Credential={awsAccessKey}/{Scope}, ");
+            authString.Append($"SignedHeaders={canonicalizedHeaderNames}, ");
+            authString.Append($"Signature={signatureString}");
 
-//            var authorization = authString.ToString();
-//            Debug.WriteLine($"\nAuthorization:\n{authorization}");
+            var authorization = authString.ToString();
+            Debug.WriteLine($"\nAuthorization:\n{authorization}");
 
-//            return authorization;
-//        }
+            return authorization;
+        }
 
-//        /// <summary>
-//        /// Calculates the expanded payload size of our data when it is chunked
-//        /// </summary>
-//        /// <param name="originalLength">
-//        /// The true size of the data payload to be uploaded
-//        /// </param>
-//        /// <param name="chunkSize">
-//        /// The size of each chunk we intend to send; each chunk will be
-//        /// prefixed with signed header data, expanding the overall size
-//        /// by a determinable amount
-//        /// </param>
-//        /// <returns>
-//        /// The overall payload size to use as content-length on a chunked upload
-//        /// </returns>
-//        public long CalculateChunkedContentLength(long originalLength, long chunkSize)
-//        {
-//            if (originalLength <= 0)
-//                throw new ArgumentOutOfRangeException("originalLength");
-//            if (chunkSize <= 0)
-//                throw new ArgumentOutOfRangeException("chunkSize");
+        /// <summary>
+        /// Calculates the expanded payload size of our data when it is chunked
+        /// </summary>
+        /// <param name="originalLength">
+        /// The true size of the data payload to be uploaded
+        /// </param>
+        /// <param name="chunkSize">
+        /// The size of each chunk we intend to send; each chunk will be
+        /// prefixed with signed header data, expanding the overall size
+        /// by a determinable amount
+        /// </param>
+        /// <returns>
+        /// The overall payload size to use as content-length on a chunked upload
+        /// </returns>
+        public long CalculateChunkedContentLength(long originalLength, long chunkSize)
+        {
+            if (originalLength <= 0)
+                throw new ArgumentOutOfRangeException("originalLength");
+            if (chunkSize <= 0)
+                throw new ArgumentOutOfRangeException("chunkSize");
 
-//            var maxSizeChunks = originalLength / chunkSize;
-//            var remainingBytes = originalLength % chunkSize;
+            var maxSizeChunks = originalLength / chunkSize;
+            var remainingBytes = originalLength % chunkSize;
 
-//            var chunkedContentLength = maxSizeChunks * CalculateChunkHeaderLength(chunkSize)
-//                                       + (remainingBytes > 0 ? CalculateChunkHeaderLength(remainingBytes) : 0)
-//                                       + CalculateChunkHeaderLength(0);
+            var chunkedContentLength = maxSizeChunks * CalculateChunkHeaderLength(chunkSize)
+                                       + (remainingBytes > 0 ? CalculateChunkHeaderLength(remainingBytes) : 0)
+                                       + CalculateChunkHeaderLength(0);
 
-//            Debug.WriteLine($"\nComputed chunked content length for original length {originalLength} bytes, chunk size {chunkSize / 1024}KB is {chunkedContentLength} bytes");
-//            return chunkedContentLength;
-//        }
+            Debug.WriteLine($"\nComputed chunked content length for original length {originalLength} bytes, chunk size {chunkSize / 1024}KB is {chunkedContentLength} bytes");
+            return chunkedContentLength;
+        }
 
-//        /// <summary>
-//        /// Returns the size of a chunk header, which only varies depending
-//        /// on the selected chunk size
-//        /// </summary>
-//        /// <param name="chunkSize">
-//        /// The intended size of each chunk; this is placed into the chunk 
-//        /// header
-//        /// </param>
-//        /// <returns>
-//        /// The overall size of the header that will prefix the user data in 
-//        /// each chunk
-//        /// </returns>
-//        static long CalculateChunkHeaderLength(long chunkSize)
-//        {
-//            return chunkSize.ToString("X").Length
-//                    + CHUNK_SIGNATURE_HEADER.Length
-//                    + SIGNATURE_LENGTH
-//                    + CLRF.Length
-//                    + chunkSize
-//                    + CLRF.Length;
-//        }
+        /// <summary>
+        /// Returns the size of a chunk header, which only varies depending
+        /// on the selected chunk size
+        /// </summary>
+        /// <param name="chunkSize">
+        /// The intended size of each chunk; this is placed into the chunk 
+        /// header
+        /// </param>
+        /// <returns>
+        /// The overall size of the header that will prefix the user data in 
+        /// each chunk
+        /// </returns>
+        static long CalculateChunkHeaderLength(long chunkSize)
+        {
+            return chunkSize.ToString("X").Length
+                    + CHUNK_SIGNATURE_HEADER.Length
+                    + SIGNATURE_LENGTH
+                    + CLRF.Length
+                    + chunkSize
+                    + CLRF.Length;
+        }
 
-//        /// <summary>
-//        /// Returns a chunk for upload consisting of the signed 'header' or chunk
-//        /// prefix plus the user data. The signature of the chunk incorporates the
-//        /// signature of the previous chunk (or, if the first chunk, the signature
-//        /// of the headers portion of the request).
-//        /// </summary>
-//        /// <param name="userDataLen">
-//        /// The length of the user data contained in userData
-//        /// </param>
-//        /// <param name="userData">
-//        /// Contains the user data to be sent in the upload chunk
-//        /// </param>
-//        /// <returns>
-//        /// A new buffer of data for upload containing the chunk header plus user data
-//        /// </returns>
-//        public byte[] ConstructSignedChunk(long userDataLen, byte[] userData)
-//        {
-//            // to keep our computation routine signatures simple, if the userData
-//            // buffer contains less data than it could, shrink it. Note the special case
-//            // to handle the requirement that we send an empty chunk to complete
-//            // our chunked upload.
-//            byte[] dataToChunk;
-//            if (userDataLen == 0)
-//                dataToChunk = FINAL_CHUNK;
-//            else
-//            {
-//                if (userDataLen < userData.Length)
-//                {
-//                    // shrink the chunkdata to fit
-//                    dataToChunk = new byte[userDataLen];
-//                    Array.Copy(userData, 0, dataToChunk, 0, (int)userDataLen);
-//                }
-//                else
-//                    dataToChunk = userData;
-//            }
+        /// <summary>
+        /// Returns a chunk for upload consisting of the signed 'header' or chunk
+        /// prefix plus the user data. The signature of the chunk incorporates the
+        /// signature of the previous chunk (or, if the first chunk, the signature
+        /// of the headers portion of the request).
+        /// </summary>
+        /// <param name="userDataLen">
+        /// The length of the user data contained in userData
+        /// </param>
+        /// <param name="userData">
+        /// Contains the user data to be sent in the upload chunk
+        /// </param>
+        /// <returns>
+        /// A new buffer of data for upload containing the chunk header plus user data
+        /// </returns>
+        public byte[] ConstructSignedChunk(long userDataLen, byte[] userData)
+        {
+            // to keep our computation routine signatures simple, if the userData
+            // buffer contains less data than it could, shrink it. Note the special case
+            // to handle the requirement that we send an empty chunk to complete
+            // our chunked upload.
+            byte[] dataToChunk;
+            if (userDataLen == 0)
+                dataToChunk = FINAL_CHUNK;
+            else
+            {
+                if (userDataLen < userData.Length)
+                {
+                    // shrink the chunkdata to fit
+                    dataToChunk = new byte[userDataLen];
+                    Array.Copy(userData, 0, dataToChunk, 0, (int)userDataLen);
+                }
+                else
+                    dataToChunk = userData;
+            }
 
-//            var chunkHeader = new StringBuilder();
+            var chunkHeader = new StringBuilder();
 
-//            // start with size of user data
-//            chunkHeader.Append(dataToChunk.Length.ToString("X"));
+            // start with size of user data
+            chunkHeader.Append(dataToChunk.Length.ToString("X"));
 
-//            // nonsig-extension; we have none in these samples
-//            const string nonsigExtension = "";
+            // nonsig-extension; we have none in these samples
+            const string nonsigExtension = "";
 
-//            // if this is the first chunk, we package it with the signing result
-//            // of the request headers, otherwise we use the cached signature
-//            // of the previous chunk
+            // if this is the first chunk, we package it with the signing result
+            // of the request headers, otherwise we use the cached signature
+            // of the previous chunk
 
-//            // sig-extension
-//            var chunkStringToSign =
-//                    CHUNK_STRING_TO_SIGN_PREFIX + "\n" +
-//                    DateTimeStamp + "\n" +
-//                    Scope + "\n" +
-//                    LastComputedSignature + "\n" +
-//                    ToHexString(CanonicalRequestHashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(nonsigExtension)), true) + "\n" +
-//                    ToHexString(CanonicalRequestHashAlgorithm.ComputeHash(dataToChunk), true);
+            // sig-extension
+            var chunkStringToSign =
+                    CHUNK_STRING_TO_SIGN_PREFIX + "\n" +
+                    DateTimeStamp + "\n" +
+                    Scope + "\n" +
+                    LastComputedSignature + "\n" +
+                    ToHexString(CanonicalRequestHashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(nonsigExtension)), true) + "\n" +
+                    ToHexString(CanonicalRequestHashAlgorithm.ComputeHash(dataToChunk), true);
 
-//            Debug.WriteLine($"\nChunkStringToSign:\n{chunkStringToSign}");
+            Debug.WriteLine($"\nChunkStringToSign:\n{chunkStringToSign}");
 
-//            // compute the V4 signature for the chunk
-//            var chunkSignature
-//                = ToHexString(ComputeKeyedHash(SigningKey,
-//                                               Encoding.UTF8.GetBytes(chunkStringToSign)),
-//                                               true);
+            // compute the V4 signature for the chunk
+            var chunkSignature
+                = ToHexString(ComputeKeyedHash(SigningKey,
+                                               Encoding.UTF8.GetBytes(chunkStringToSign)),
+                                               true);
 
-//            Debug.WriteLine($"\nChunkSignature:\n{chunkSignature}");
+            Debug.WriteLine($"\nChunkSignature:\n{chunkSignature}");
 
-//            // cache the signature to include with the next chunk's signature computation
-//            this.LastComputedSignature = chunkSignature;
+            // cache the signature to include with the next chunk's signature computation
+            this.LastComputedSignature = chunkSignature;
 
-//            // construct the actual chunk, comprised of the non-signed extensions, the
-//            // 'headers' we just signed and their signature, plus a newline then copy
-//            // that plus the user's data to a payload to be written to the request stream
-//            chunkHeader.Append(nonsigExtension + CHUNK_SIGNATURE_HEADER + chunkSignature);
-//            chunkHeader.Append(CLRF);
+            // construct the actual chunk, comprised of the non-signed extensions, the
+            // 'headers' we just signed and their signature, plus a newline then copy
+            // that plus the user's data to a payload to be written to the request stream
+            chunkHeader.Append(nonsigExtension + CHUNK_SIGNATURE_HEADER + chunkSignature);
+            chunkHeader.Append(CLRF);
 
-//            Debug.WriteLine($"\nChunkHeader:\n{chunkHeader}");
+            Debug.WriteLine($"\nChunkHeader:\n{chunkHeader}");
 
-//            try
-//            {
-//                var header = Encoding.UTF8.GetBytes(chunkHeader.ToString());
-//                var trailer = Encoding.UTF8.GetBytes(CLRF);
-//                var signedChunk = new byte[header.Length + dataToChunk.Length + trailer.Length];
+            try
+            {
+                var header = Encoding.UTF8.GetBytes(chunkHeader.ToString());
+                var trailer = Encoding.UTF8.GetBytes(CLRF);
+                var signedChunk = new byte[header.Length + dataToChunk.Length + trailer.Length];
 
-//                Array.Copy(header, 0, signedChunk, 0, header.Length);
-//                Array.Copy(dataToChunk, 0, signedChunk, header.Length, dataToChunk.Length);
-//                Array.Copy(trailer, 0, signedChunk, header.Length + dataToChunk.Length, trailer.Length);
+                Array.Copy(header, 0, signedChunk, 0, header.Length);
+                Array.Copy(dataToChunk, 0, signedChunk, header.Length, dataToChunk.Length);
+                Array.Copy(trailer, 0, signedChunk, header.Length + dataToChunk.Length, trailer.Length);
 
-//                // this is the total data for the chunk that will be sent to the request stream
-//                return signedChunk;
-//            }
-//            catch (Exception e)
-//            {
-//                throw new Exception("Unable to sign the chunked data. " + e.Message, e);
-//            }
-//        }
-//    }
-//}
+                // this is the total data for the chunk that will be sent to the request stream
+                return signedChunk;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Unable to sign the chunked data. " + e.Message, e);
+            }
+        }
+    }
+}
