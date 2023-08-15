@@ -33,6 +33,8 @@
   <ItemGroup>
     <Compile Include="AwsSignatureVersion4\nfArrayListExtensions.cs" />
     <Compile Include="AwsSignatureVersion4\HMACSHA256.cs" />
+    <Compile Include="AwsSignatureVersion4\nfOrdinalComparer.cs" />
+    <Compile Include="AwsSignatureVersion4\nfStringComparer.cs" />
     <Compile Include="AwsSignatureVersion4\SHA256.cs" />
     <Compile Include="CloudToDeviceMessage.cs" />
     <Compile Include="ConfirmationStatus.cs" />
