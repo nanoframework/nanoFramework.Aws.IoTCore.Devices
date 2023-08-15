@@ -34,7 +34,7 @@ namespace nanoFramework.Aws.IoTCore.Devices
 
         const int _wssPort = 443; //Default WSS port.
 
-        //WebSocket _webSocket = null;
+        //private WebSocket _webSocket = null;
 
         /// <summary>
         /// Creates a new MQTT over WebSocket Connection Client
@@ -66,7 +66,11 @@ namespace nanoFramework.Aws.IoTCore.Devices
         /// <inheritdoc/>
         public void Dispose()
         {
-
+            //if (_webSocket != null)
+            //{
+            //    GC.SuppressFinalize(_webSocket);
+            //    _webSocket = null;
+            //}
         }
     }
 }
