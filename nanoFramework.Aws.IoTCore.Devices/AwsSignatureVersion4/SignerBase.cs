@@ -44,7 +44,7 @@ namespace nanoFramework.Aws.SignatureVersion4
 
         // algorithm used to hash the canonical request that is supplied to
         // the signature computation
-        internal static SHA256 CanonicalRequestHashAlgorithm = SHA256.Create();
+        internal static readonly SHA256 CanonicalRequestHashAlgorithm = SHA256.Create();
 
         /// <summary>
         /// The service endpoint, including the path to any resource.

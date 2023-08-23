@@ -31,10 +31,10 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="AwsSignatureVersion4\nfArrayListExtensions.cs" />
+    <Compile Include="AwsSignatureVersion4\NanoArrayListExtensions.cs" />
     <Compile Include="AwsSignatureVersion4\HMACSHA256.cs" />
-    <Compile Include="AwsSignatureVersion4\nfOrdinalComparer.cs" />
-    <Compile Include="AwsSignatureVersion4\nfStringComparer.cs" />
+    <Compile Include="AwsSignatureVersion4\NanoOrdinalComparer.cs" />
+    <Compile Include="AwsSignatureVersion4\NanoStringComparer.cs" />
     <Compile Include="AwsSignatureVersion4\SHA256.cs" />
     <Compile Include="CloudToDeviceMessage.cs" />
     <Compile Include="ConfirmationStatus.cs" />

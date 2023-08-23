@@ -8,7 +8,7 @@ namespace System.Collections
     /// <summary>
     /// Extension methods used for canonicalization.
     /// </summary>
-    public static class nfArrayListExtensions
+    public static class NanoArrayListExtensions
     {
         /// <summary>
         /// Sort an ArrayList
