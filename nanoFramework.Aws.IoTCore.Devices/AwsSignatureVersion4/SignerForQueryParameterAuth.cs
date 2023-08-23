@@ -125,7 +125,7 @@ namespace nanoFramework.Aws.SignatureVersion4
                                                        canonicalizedHeaderNames,
                                                        canonicalizedHeaders,
                                                        bodyHash);
-            Debug.WriteLine($"\nCanonicalRequest:\n{canonicalRequest}");
+            //Debug.WriteLine($"\nDEBUG-CanonicalRequest:\n{canonicalRequest}");
 
             byte[] canonicalRequestHashBytes
                 = CanonicalRequestHashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(canonicalRequest));
@@ -136,7 +136,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             stringToSign.Append($"{SCHEME}-{ALGORITHM}\n{dateTimeStamp}\n{scope}\n");
             stringToSign.Append(ToHexString(canonicalRequestHashBytes, true));
 
-            Debug.WriteLine($"\nStringToSign:\n{stringToSign}");
+            //Debug.WriteLine($"\nDEBUG-StringToSign:\n{stringToSign}");
 
             // compute the multi-stage signing key
             var kha = new HMACSHA256(DeriveSigningKey(awsSecretKey, Region, dateStamp, Service));
@@ -145,7 +145,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             // user to be embedded in the request as needed
             var signature = kha.ComputeHash(Encoding.UTF8.GetBytes(stringToSign.ToString()));
             var signatureString = ToHexString(signature, true);
-            Debug.WriteLine($"\nSignature:\n{signatureString}");
+            //Debug.WriteLine($"\nDEBUG-Signature:\n{signatureString}");
 
             // form up the authorization parameters for the caller to place in the query string
             var authString = new StringBuilder();
@@ -167,7 +167,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             authString.Append($"&{X_Amz_Signature}={signatureString}");
 
             var authorization = authString.ToString();
-            Debug.WriteLine($"\nAuthorization:\n{authorization}");
+            //Debug.WriteLine($"\nDEBUG-Authorization:\n{authorization}");
 
             return authorization;
         }
