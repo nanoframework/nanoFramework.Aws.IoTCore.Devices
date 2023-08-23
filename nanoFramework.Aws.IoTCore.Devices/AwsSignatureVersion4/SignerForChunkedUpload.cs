@@ -147,7 +147,7 @@ namespace nanoFramework.Aws.SignatureVersion4
                                                        canonicalizedHeaderNames,
                                                        canonicalizedHeaders,
                                                        bodyHash);
-            Debug.WriteLine($"\nCanonicalRequest:\n{canonicalRequest}");
+            Debug.WriteLine($"\nDEBUG-CanonicalRequest:\n{canonicalRequest}");
 
             // generate a hash of the canonical request, to go into signature computation
             var canonicalRequestHashBytes
@@ -162,7 +162,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             stringToSign.Append($"{SCHEME}-{ALGORITHM}\n{DateTimeStamp}\n{Scope}\n");
             stringToSign.Append(ToHexString(canonicalRequestHashBytes, true));
 
-            Debug.WriteLine($"\nStringToSign:\n{stringToSign}");
+            Debug.WriteLine($"\nDEBUG-StringToSign:\n{stringToSign}");
 
             // compute the signing key
             SigningKey = DeriveSigningKey(awsSecretKey, Region, dateStamp, Service);
@@ -172,7 +172,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             // compute the AWS4 signature and return it
             var signature = kha.ComputeHash(Encoding.UTF8.GetBytes(stringToSign.ToString()));
             var signatureString = ToHexString(signature, true);
-            Debug.WriteLine($"\nSignature:\n{signatureString}");
+            Debug.WriteLine($"\nDEBUG-Signature:\n{signatureString}");
 
             // cache the computed signature ready for chunk 0 upload
             LastComputedSignature = signatureString;
@@ -184,7 +184,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             authString.Append($"Signature={signatureString}");
 
             var authorization = authString.ToString();
-            Debug.WriteLine($"\nAuthorization:\n{authorization}");
+            Debug.WriteLine($"\nDEBUG-Authorization:\n{authorization}");
 
             return authorization;
         }
@@ -217,7 +217,7 @@ namespace nanoFramework.Aws.SignatureVersion4
                                        + (remainingBytes > 0 ? CalculateChunkHeaderLength(remainingBytes) : 0)
                                        + CalculateChunkHeaderLength(0);
 
-            Debug.WriteLine($"\nComputed chunked content length for original length {originalLength} bytes, chunk size {chunkSize / 1024}KB is {chunkedContentLength} bytes");
+            Debug.WriteLine($"\nDEBUG-Computed chunked content length for original length {originalLength} bytes, chunk size {chunkSize / 1024}KB is {chunkedContentLength} bytes");
             return chunkedContentLength;
         }
 
@@ -300,7 +300,7 @@ namespace nanoFramework.Aws.SignatureVersion4
                     ToHexString(CanonicalRequestHashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(nonsigExtension)), true) + "\n" +
                     ToHexString(CanonicalRequestHashAlgorithm.ComputeHash(dataToChunk), true);
 
-            Debug.WriteLine($"\nChunkStringToSign:\n{chunkStringToSign}");
+            Debug.WriteLine($"\nDEBUG-ChunkStringToSign:\n{chunkStringToSign}");
 
             // compute the V4 signature for the chunk
             var chunkSignature
@@ -308,7 +308,7 @@ namespace nanoFramework.Aws.SignatureVersion4
                                                Encoding.UTF8.GetBytes(chunkStringToSign)),
                                                true);
 
-            Debug.WriteLine($"\nChunkSignature:\n{chunkSignature}");
+            Debug.WriteLine($"\nDEBUG-ChunkSignature:\n{chunkSignature}");
 
             // cache the signature to include with the next chunk's signature computation
             this.LastComputedSignature = chunkSignature;
@@ -319,7 +319,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             chunkHeader.Append(nonsigExtension + CHUNK_SIGNATURE_HEADER + chunkSignature);
             chunkHeader.Append(CLRF);
 
-            Debug.WriteLine($"\nChunkHeader:\n{chunkHeader}");
+            Debug.WriteLine($"\nDEBUG-ChunkHeader:\n{chunkHeader}");
 
             try
             {

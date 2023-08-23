@@ -112,7 +112,7 @@ namespace nanoFramework.Aws.SignatureVersion4
                                                        canonicalizedHeaderNames,
                                                        canonicalizedHeaders,
                                                        bodyHash);
-            Debug.WriteLine($"\nCanonicalRequest:\n{canonicalRequest}");
+            Debug.WriteLine($"\nDEBUG-CanonicalRequest:\n{canonicalRequest}");
 
             // generate a hash of the canonical request, to go into signature computation
             var canonicalRequestHashBytes
@@ -127,7 +127,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             stringToSign.Append($"{SCHEME}-{ALGORITHM}\n{dateTimeStamp}\n{scope}\n");
             stringToSign.Append(ToHexString(canonicalRequestHashBytes, true));
 
-            Debug.WriteLine($"\nStringToSign:\n{stringToSign}");
+            Debug.WriteLine($"\nDEBUG-StringToSign:\n{stringToSign}");
 
             // compute the signing key
             var kha = new HMACSHA256(DeriveSigningKey(awsSecretKey, Region, dateStamp, Service));
@@ -135,7 +135,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             // compute the AWS4 signature and return it
             var signature = kha.ComputeHash(Encoding.UTF8.GetBytes(stringToSign.ToString()));
             var signatureString = ToHexString(signature, true);
-            Debug.WriteLine($"\nSignature:\n{signatureString}");
+            Debug.WriteLine($"\nDEBUG-Signature:\n{signatureString}");
 
             var authString = new StringBuilder();
             authString.Append($"{SCHEME}-{ALGORITHM} ");
@@ -144,7 +144,7 @@ namespace nanoFramework.Aws.SignatureVersion4
             authString.Append($"Signature={signatureString}");
 
             var authorization = authString.ToString();
-            Debug.WriteLine($"\nAuthorization:\n{authorization}");
+            Debug.WriteLine($"\nDEBUG-Authorization:\n{authorization}");
 
             return authorization;
         }
