@@ -36,11 +36,17 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  DOTNET_NOLOGO: true
-  solution: 'nanoFramework.Aws.IoTCore.Devices.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  nugetPackageName: 'nanoFramework.Aws.IoTCore.Devices'
+  - group: sign-client-credentials
+  - name: DOTNET_NOLOGO
+    value: true  
+  - name: buildPlatform
+    value: 'Any CPU'  
+  - name: buildConfiguration
+    value: 'Release'
+  - name: solution
+    value: 'nanoFramework.Aws.IoTCore.Devices.sln'
+  - name: nugetPackageName
+    value: 'nanoFramework.Aws.IoTCore.Devices'
 
 steps:
 
