@@ -12,7 +12,7 @@ on:
     types: update-dependencies
 
 jobs:
-  update-nuget-dependencies:
+  update-dependencies:
     name: Update dependencies
     uses: nanoframework/nf-tools/.github/workflows/update-dependencies.yml@main
     secrets: inherit
