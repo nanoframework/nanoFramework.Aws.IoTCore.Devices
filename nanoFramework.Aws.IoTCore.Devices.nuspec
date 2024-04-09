@@ -22,8 +22,8 @@ This is an SDK for Aws IoTCore.</description>
       <dependency id="nanoFramework.CoreLibrary" version="1.15.5" />
       <dependency id="nanoFramework.Json" version="2.2.117" />
       <dependency id="nanoFramework.M2Mqtt" version="5.1.123" />
-      <dependency id="nanoFramework.System.Net.WebSockets" version="1.1.57" />
-      <dependency id="nanoFramework.System.Text.RegularExpressions" version="1.1.37" />
+      <dependency id="nanoFramework.System.Net.WebSockets" version="1.1.92" />
+      <dependency id="nanoFramework.System.Text.RegularExpressions" version="1.1.51" />
     </dependencies>
   </metadata>
   <files>
