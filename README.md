@@ -82,11 +82,11 @@ Note: when the certificate expires, you will have to fully reflash the device wi
 
 You can store the certificate in the device flash and not in the code, so if you have to change the certificate, you'll just have to clean the current store and upload the new one. Edit the network properties:
 
-![edit device network](readme-assets/device-network.jpg)
+![edit device network](https://raw.githubusercontent.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/main/readme-assets/device-network.jpg)
 
 Navigate to the `General` tab:
 
-![device network certificate](readme-assets/device-network-certificate.jpg)
+![device network certificate](https://raw.githubusercontent.com/nanoframework/nanoFramework.Aws.IoTCore.Devices/main/readme-assets/device-network-certificate.jpg)
 
 Browse to choose your certificate, it can be in a binary (crt, der) or string form (pem, txt) and select ok. The certificate to connect will be selected automatically during the connection.
 
