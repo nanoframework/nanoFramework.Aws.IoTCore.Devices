@@ -31,6 +31,11 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="AwsSignatureVersion4\NanoArrayListExtensions.cs" />
+    <Compile Include="AwsSignatureVersion4\HMACSHA256.cs" />
+    <Compile Include="AwsSignatureVersion4\NanoOrdinalComparer.cs" />
+    <Compile Include="AwsSignatureVersion4\NanoStringComparer.cs" />
+    <Compile Include="AwsSignatureVersion4\SHA256.cs" />
     <Compile Include="CloudToDeviceMessage.cs" />
     <Compile Include="ConfirmationStatus.cs" />
     <Compile Include="ConnectorState.cs" />
@@ -40,6 +45,11 @@
     <Compile Include="Shadows\ShadowProperties.cs" />
     <Compile Include="Shadows\ShadowUpdatedEventArgs.cs" />
     <Compile Include="ConnectorStateMessage.cs" />
+    <Compile Include="AwsSignatureVersion4\SignerBase.cs" />
+    <Compile Include="AwsSignatureVersion4\SignerForAuthorizationHeader.cs" />
+    <Compile Include="AwsSignatureVersion4\SignerForChunkedUpload.cs" />
+    <Compile Include="AwsSignatureVersion4\SignerForPOST.cs" />
+    <Compile Include="AwsSignatureVersion4\SignerForQueryParameterAuth.cs" />
     <Compile Include="StatusUpdatedEventArgs.cs" />
     <Compile Include="WebsocketConnectionClient.cs" />
   </ItemGroup>
@@ -76,6 +86,15 @@
     </Reference>
     <Reference Include="System.Net, Version=1.11.43.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.System.Net.1.11.43\lib\System.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>..\packages\nanoFramework.System.Net.Http.1.5.196\lib\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.WebSockets">
+      <HintPath>..\packages\nanoFramework.System.Net.WebSockets.1.1.151\lib\System.Net.WebSockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.RegularExpressions">
+      <HintPath>..\packages\nanoFramework.System.Text.RegularExpressions.1.1.128\lib\System.Text.RegularExpressions.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading, Version=1.1.52.34401, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.System.Threading.1.1.52\lib\System.Threading.dll</HintPath>
