@@ -21,7 +21,7 @@ This is an SDK for Aws IoTCore.</description>
     <dependencies>
       <group targetFramework=".NETnanoFramework1.0">
         <dependency id="nanoFramework.CoreLibrary" version="2.0.0-preview.49" />
-        <dependency id="nanoFramework.Json" version="2.2.210" />
+        <dependency id="nanoFramework.Json" version="3.0.0-preview.7" />
         <dependency id="nanoFramework.M2Mqtt" version="5.1.212" />
       </group>
     </dependencies>
