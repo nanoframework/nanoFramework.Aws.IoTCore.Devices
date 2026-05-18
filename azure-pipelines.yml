@@ -55,7 +55,7 @@ steps:
     sonarCloudProject: 'nanoFramework.Aws.IoTCore.Devices'
     usePreviewBuild: true
     runUnitTests: true
-    unitTestRunsettings: '$(System.DefaultWorkingDirectory)/Tests/nano.runsettings'
+    unitTestRunsettings: '$(System.DefaultWorkingDirectory)/.runsettings'
 
 # step from template @ nf-tools repo
 # report error
