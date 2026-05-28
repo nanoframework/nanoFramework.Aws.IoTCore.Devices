@@ -20,9 +20,9 @@ This is an SDK for Aws IoTCore.</description>
     <tags>nanoFramework C# csharp netmf netnf AWS IoTCore Aws IoTCore</tags>
     <dependencies>
       <group targetFramework=".NETnanoFramework1.0">
-        <dependency id="nanoFramework.CoreLibrary" version="2.0.0-preview.49" />
+        <dependency id="nanoFramework.CoreLibrary" version="2.0.0-preview.52" />
         <dependency id="nanoFramework.Json" version="3.0.0-preview.7" />
-        <dependency id="nanoFramework.M2Mqtt" version="6.0.0-preview.2" />
+        <dependency id="nanoFramework.M2Mqtt" version="6.0.0-preview.7" />
       </group>
     </dependencies>
   </metadata>
